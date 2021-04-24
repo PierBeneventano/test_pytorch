@@ -52,12 +52,12 @@ transform_train = transforms.Compose([
     transforms.RandomCrop(crop, padding=4),
     transforms.RandomHorizontalFlip(),
     transforms.ToTensor(),
-    transforms.Normalize(stats),
+    transforms.Normalize(*stats),
 ])
 
 transform_test = transforms.Compose([
     transforms.ToTensor(),
-    transforms.Normalize(stats),
+    transforms.Normalize(*stats),
 ])
 
 if args.dataset == 'cifar10':
