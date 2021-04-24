@@ -26,6 +26,13 @@ parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
 
+# print the arguments
+print("The arguments are: \n")
+args = parser.parse_args()
+for arg in vars(args):
+	print(arg, " : ", getattr(args, arg))
+
+
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
