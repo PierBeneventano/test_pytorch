@@ -94,7 +94,7 @@ elif args.dataset == 'MNIST':
         testset, args.batchsize, shuffle=False)
 
 # plot 6 examples of data point
-examples = enumerate(test_loader)
+examples = enumerate(testloader)
 batch_idx, (example_data, example_targets) = next(examples)
 example_data.shape
 
