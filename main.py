@@ -17,9 +17,12 @@ from models import *
 from utils import progress_bar
 
 
-parser = argparse.ArgumentParser(description='PyTorch CIFAR10 Training')
+parser = argparse.ArgumentParser(description='PyTorch Neural Networks')
+
+parser.add_argument('--loss', choices=['l2', 'cross_entropy'], default='crossentropy', help='what loss (criterion) to use')
 parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], default='cifar10', help='what dataset to use')
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
+parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
 parser.add_argument('--resume', '-r', action='store_true',
@@ -45,11 +48,12 @@ if args.dataset == 'cifar10':
     crop=32
     classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
-    input_dim = [1,1,32,32]
+    input_dim = [1,3,32,32]
 elif args.dataset == 'cifar100':
     stats = ((0.5074,0.4867,0.4411),(0.2011,0.1987,0.2025))
     crop=32
-    input_dim = [1,1,32,32]
+    input_dim = [1,3,32,32]
+    
 elif args.dataset == 'MNIST':
     stats = ((0.1307,), (0.3081,))
     crop=28
@@ -140,7 +144,11 @@ if args.resume:
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
 
-criterion = nn.CrossEntropyLoss()
+if args.loss == 'cross_entropy':
+	criterion = nn.CrossEntropyLoss().cuda()
+else:
+	criterion = nn.MSELoss().cuda()
+
 optimizer = optim.SGD(net.parameters(), lr=args.lr,
                       momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
@@ -168,6 +176,10 @@ def train(epoch):
 
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+
+        torch.save(net.state_dict(), '/results/model.pth')
+        torch.save(optimizer.state_dict(), '/results/optimizer.pth')
+
 
 
 def test(epoch):
@@ -205,7 +217,7 @@ def test(epoch):
         best_acc = acc
 
 
-for epoch in range(start_epoch, start_epoch+200):
+for epoch in range(start_epoch, args.number_epochs):
     train(epoch)
     test(epoch)
     scheduler.step()
