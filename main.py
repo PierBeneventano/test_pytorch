@@ -19,7 +19,7 @@ from utils import progress_bar
 
 parser = argparse.ArgumentParser(description='PyTorch Neural Networks')
 
-parser.add_argument('--loss', choices=['l2', 'cross_entropy'], default='crossentropy', help='what loss (criterion) to use')
+parser.add_argument('--loss', choices=['l2', 'cross_entropy'], default='cross_entropy', help='what loss (criterion) to use')
 parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], default='cifar10', help='what dataset to use')
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
 parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
