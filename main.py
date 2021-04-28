@@ -141,7 +141,7 @@ fig
 # Model
 print('==> Building model..')
 if args.dataset == 'MNIST':
-    INPUT_DIM = [28,28]
+    INPUT_DIM =28*28
     OUTPUT_DIM = 10
     net = MLP(INPUT_DIM, OUTPUT_DIM)
 else:
