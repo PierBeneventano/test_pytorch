@@ -177,9 +177,6 @@ def train(epoch):
         progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
-        torch.save(net.state_dict(), '/results/model.pth')
-        torch.save(optimizer.state_dict(), '/results/optimizer.pth')
-
 
 
 def test(epoch):
@@ -213,7 +210,9 @@ def test(epoch):
         }
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
-        torch.save(state, './checkpoint/ckpt.pth')
+        # torch.save(state, './checkpoint/ckpt.pth')
+        torch.save(net.state_dict(), '/checkpoint/model.pth')
+        torch.save(optimizer.state_dict(), '/checkpoint/optimizer.pth')
         best_acc = acc
 
 
