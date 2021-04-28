@@ -138,7 +138,7 @@ fig
 print('==> Building model..')
 
 if args.net == 'densenet':
-    net = Densenet121()
+    net = DenseNet121()
 elif args.net == 'dla':
     net = DLA()
 else:
