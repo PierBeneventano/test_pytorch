@@ -104,6 +104,8 @@ elif args.dataset == 'MNIST':
     trainset = torchvision.datasets.MNIST(
         root='./data', train=True, download=True, 
         transform=torchvision.transforms.Compose([
+            transforms.RandomRotation(5, fill=(0,)),
+            transforms.RandomCrop(crop, padding = 2),
             torchvision.transforms.ToTensor(),
             torchvision.transforms.Normalize(*stats)]))
         
@@ -113,6 +115,8 @@ elif args.dataset == 'MNIST':
     testset = torchvision.datasets.MNIST(
         root='./data', train=False, download=True, 
         transform=torchvision.transforms.Compose([
+            transforms.RandomRotation(5, fill=(0,)),
+            transforms.RandomCrop(crop, padding = 2),
             torchvision.transforms.ToTensor(),
             torchvision.transforms.Normalize(*stats)]))
     testloader = torch.utils.data.DataLoader(
@@ -136,13 +140,17 @@ fig
 
 # Model
 print('==> Building model..')
-
-if args.net == 'densenet':
-    net = DenseNet121()
-elif args.net == 'dla':
-    net = DLA()
+if args.dataser == 'MNIST':
+    INPUT_DIM = [28,28]
+    OUTPUT_DIM = 10
+    net = MLP(INPUT_DIM, OUTPUT_DIM)
 else:
-    net = VGG('VGG19')
+    if args.net == 'densenet':
+        net = DenseNet121()
+    elif args.net == 'dla':
+        net = DLA()
+    else:
+        net = VGG('VGG19')
 
 net = net.to(device)
 if device == 'cuda':
