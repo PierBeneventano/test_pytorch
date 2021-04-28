@@ -122,6 +122,7 @@ elif args.dataset == 'MNIST':
     testloader = torch.utils.data.DataLoader(
         testset, args.batchsize, shuffle=False)
 
+
 # plot 6 examples of data point
 examples = enumerate(testloader)
 batch_idx, (example_data, example_targets) = next(examples)
@@ -186,7 +187,7 @@ def train(epoch):
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
-        outputs = net(inputs)
+        outputs, aux = net(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
