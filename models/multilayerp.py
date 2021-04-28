@@ -19,11 +19,11 @@ class MLP(nn.Module):
         
         #x = [batch size, height * width]
         
-        h_1 = F.relu(self.input_fc(x))
+        h_1 = nn.functional.relu(self.input_fc(x))
         
         #h_1 = [batch size, 250]
 
-        h_2 = F.relu(self.hidden_fc(h_1))
+        h_2 = nn.functional.relu(self.hidden_fc(h_1))
 
         #h_2 = [batch size, 100]
 
