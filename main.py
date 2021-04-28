@@ -187,7 +187,10 @@ def train(epoch):
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         inputs, targets = inputs.to(device), targets.to(device)
         optimizer.zero_grad()
-        outputs, aux = net(inputs)
+        if args.dataset == 'MNIST':
+            outputs, aux = net(inputs)
+        else:
+            outputs = net(inputs)
         loss = criterion(outputs, targets)
         loss.backward()
         optimizer.step()
@@ -211,7 +214,10 @@ def test(epoch):
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
-            outputs, aux = net(inputs)
+            if args.dataset == 'MNIST':
+                outputs, aux = net(inputs)
+            else:
+                outputs = net(inputs)
             loss = criterion(outputs, targets)
 
             test_loss += loss.item()
