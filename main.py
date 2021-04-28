@@ -1,4 +1,4 @@
-'''Train CIFAR10 with PyTorch.'''
+'''Train neural nets with PyTorch.'''
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -96,12 +96,19 @@ elif args.dataset == 'cifar100':
 
 elif args.dataset == 'MNIST':
     trainset = torchvision.datasets.MNIST(
-        root='./data', train=True, download=True, transform=transform_train)
+        root='./data', train=True, download=True, 
+        transform=torchvision.transforms.Compose([
+            torchvision.transforms.ToTensor(),
+            torchvision.transforms.Normalize(*stats)]))
+        
     trainloader = torch.utils.data.DataLoader(
         trainset, args.batchsize, shuffle=True)
 
     testset = torchvision.datasets.MNIST(
-        root='./data', train=False, download=True, transform=transform_test)
+        root='./data', train=False, download=True, 
+        transform=torchvision.transforms.Compose([
+            torchvision.transforms.ToTensor(),
+            torchvision.transforms.Normalize(*stats)]))
     testloader = torch.utils.data.DataLoader(
         testset, args.batchsize, shuffle=False)
 
@@ -157,7 +164,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 # Training
 def train(epoch):
-    print('\nEpoch: %d' % epoch)
+    print('\nEpoch: %d' % epoch+1)
     net.train()
     train_loss = 0
     correct = 0
