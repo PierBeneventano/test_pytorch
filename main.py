@@ -25,6 +25,7 @@ parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', 
 parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
+parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better or not')
 parser.add_argument('--resume', '-r', action='store_true',
                     help='resume from checkpoint')
 args = parser.parse_args()
@@ -202,17 +203,19 @@ def test(epoch):
     # Save checkpoint.
     acc = 100.*correct/total
     if acc > best_acc:
-        print('Saving..')
+        print('Saving...')
         state = {
-            'net': net.state_dict(),
             'acc': acc,
-            'epoch': epoch,
+            'epoch': epoch+1,
+            'architecture':args.net,
+            'dataset': args.dataset,
+            'net': net.state_dict(),
+            'optimizer': optimizer.state_dict(),
         }
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
-        # torch.save(state, './checkpoint/ckpt.pth')
-        torch.save(net.state_dict(), '/checkpoint/model.pth')
-        torch.save(optimizer.state_dict(), '/checkpoint/optimizer.pth')
+        torch.save(state, './checkpoint/ckpt.pt')
+        torch.save(state, './checkpoint/model_epoch{}.pt'.format(epoch+1))
         best_acc = acc
 
 
