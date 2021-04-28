@@ -170,7 +170,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 # Training
 def train(epoch):
-    print('\nEpoch: %d' % epoch+1)
+    print('\nEpoch: %d' % epoch)
     net.train()
     train_loss = 0
     correct = 0
