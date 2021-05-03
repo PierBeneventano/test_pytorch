@@ -204,7 +204,7 @@ optim_hparams = {
 	'optim_type' : args.optim_type
 }
 optimizer = optim_util.create_optimizer(
-	model,	optim_hparams)
+	net,	optim_hparams)
 
 # optimizer = optim.SGD(net.parameters(), lr=args.lr,
 #                       momentum=0.9, weight_decay=5e-4)
