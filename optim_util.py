@@ -1,5 +1,6 @@
 import torch
 import torch.optim as optim
+import numpy as np
 
 def create_optimizer(model, hparams):
 	if hparams['optim_type'] == 'sgd':
