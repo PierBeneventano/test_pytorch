@@ -243,7 +243,7 @@ def test(epoch):
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/model_epoch{}.pt'.format(epoch+1))
+        torch.save(state, './checkpoint/dataset{}_epoch{}.pt'.format(args.dataset, epoch+1))
         best_acc = acc
 
 
