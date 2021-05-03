@@ -145,6 +145,7 @@ if args.dataset == 'MNIST':
     INPUT_DIM =28*28
     OUTPUT_DIM = 10
     net = MLP(INPUT_DIM, OUTPUT_DIM)
+    args.net = 'MLP'
 else:
     if args.net == 'densenet':
         net = DenseNet121()
@@ -243,7 +244,7 @@ def test(epoch):
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/dataset{}_epoch{}.pt'.format(args.dataset, epoch+1))
+        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}.pt'.format(args.dataset, args.net, epoch+1))
         best_acc = acc
 
 
