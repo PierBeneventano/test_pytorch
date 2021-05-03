@@ -232,7 +232,8 @@ def train(epoch):
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
-        print('a', batch_idx, len(targets))
+        # print('a', batch_idx, len(targets))
+        
         #Label noise case
         if args.label_noise > 0:
             if args.ln_sched == 'fixed':
