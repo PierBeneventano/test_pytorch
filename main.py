@@ -15,6 +15,7 @@ import argparse
 
 from models import *
 from utils import progress_bar
+import optim_util
 
 
 parser = argparse.ArgumentParser(description='PyTorch Neural Networks')
