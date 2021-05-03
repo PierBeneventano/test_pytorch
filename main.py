@@ -19,15 +19,27 @@ from utils import progress_bar
 
 parser = argparse.ArgumentParser(description='PyTorch Neural Networks')
 
+# General arguments
 parser.add_argument('--loss', choices=['l2', 'cross_entropy'], default='cross_entropy', help='what loss (criterion) to use')
 parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], default='cifar10', help='what dataset to use')
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
 parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
-parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
 parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better or not')
-parser.add_argument('--resume', '-r', action='store_true',
-                    help='resume from checkpoint')
+parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
+# Optimizer related
+parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
+parser.add_argument('--optim_type', choices=['sgd', 'adam'], default='sgd')
+parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
+parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
+					help='weight decay (default: 5e-4)')
+# Label noise related
+parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
+parser.add_argument('--ln_sched', choices=['fixed', 'vgg_default'], default='fixed',
+					help='schedule of the label noise.')
+parser.add_argument('--ln_decay', type=float, default=0.5,
+					help='how much to multiply by when we decay')
+
 args = parser.parse_args()
 
 # print the arguments
@@ -154,6 +166,9 @@ else:
     else:
         net = VGG('VGG19')
 
+print('Number of model parameters: {}'.format(
+		sum([p.data.nelement() for p in net.parameters()])))
+
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
@@ -172,10 +187,33 @@ if args.loss == 'cross_entropy':
 	criterion = nn.CrossEntropyLoss().cuda()
 else:
 	criterion = nn.MSELoss().cuda()
+    # change something to the model in this case
 
-optimizer = optim.SGD(net.parameters(), lr=args.lr,
-                      momentum=0.9, weight_decay=5e-4)
+
+
+
+
+
+
+# The optimization
+optim_hparams = {
+	'base_lr' : args.lr, 
+	'momentum' : args.momentum,
+	'weight_decay' : args.weight_decay,
+	'optim_type' : args.optim_type
+}
+optimizer = optim_util.create_optimizer(
+	model,	optim_hparams)
+
+# optimizer = optim.SGD(net.parameters(), lr=args.lr,
+#                       momentum=0.9, weight_decay=5e-4)
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
+
+
+
+
+
+
 
 
 # Training
