@@ -173,6 +173,8 @@ else:
 print('Number of model parameters: {}'.format(
 		sum([p.data.nelement() for p in net.parameters()])))
 
+utils.init_params(net)
+
 net = net.to(device)
 if device == 'cuda':
     net = torch.nn.DataParallel(net)
