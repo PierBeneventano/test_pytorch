@@ -36,7 +36,7 @@ parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
 					help='weight decay (default: 5e-4)')
 # Label noise related
 parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
-parser.add_argument('--ln_sched', choices=['fixed', 'vgg_default'], default='fixed',
+parser.add_argument('--ln_sched', choices=['fixed', 'decay'], default='fixed',
 					help='schedule of the label noise.')
 parser.add_argument('--ln_decay', type=float, default=0.5,
 					help='how much to multiply by when we decay')
@@ -63,15 +63,19 @@ if args.dataset == 'cifar10':
     classes = ('plane', 'car', 'bird', 'cat', 'deer',
            'dog', 'frog', 'horse', 'ship', 'truck')
     input_dim = [1,3,32,32]
+    num_classes = 10
+
 elif args.dataset == 'cifar100':
     stats = ((0.5074,0.4867,0.4411),(0.2011,0.1987,0.2025))
     crop=32
     input_dim = [1,3,32,32]
+    num_classes = 100
     
 elif args.dataset == 'MNIST':
     stats = ((0.1307,), (0.3081,))
     crop=28
     input_dim = [1,1,28,28]
+    num_classes = 10
 
 transform_train = transforms.Compose([
     transforms.RandomCrop(crop, padding=4),
@@ -156,8 +160,7 @@ fig
 print('==> Building model..')
 if args.dataset == 'MNIST':
     INPUT_DIM =28*28
-    OUTPUT_DIM = 10
-    net = MLP(INPUT_DIM, OUTPUT_DIM)
+    net = MLP(INPUT_DIM, num_classes)
     args.net = 'MLP'
 else:
     if args.net == 'densenet':
@@ -225,7 +228,17 @@ def train(epoch):
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
-        # print('a')
+        print('a', batch_idx, len(targets))
+        #Label noise case
+        if args.label_noise > 0:
+            if args.ln_sched == 'fixed':
+                label_noise = args.label_noise
+            else:
+                label_noise = optim_util.ln_decay(args.label_noise, epoch, args.ln_decay)
+            
+            targets = optim_util.apply_label_noise(targets, label_noise,
+				num_classes=10 if args.dataset == 'cifar10' else 100)
+
         inputs, targets = inputs.to(device), targets.to(device)
         # print('b')
         optimizer.zero_grad()
