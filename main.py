@@ -186,22 +186,22 @@ def train(epoch):
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
-        print('a')
+        # print('a')
         inputs, targets = inputs.to(device), targets.to(device)
-        print('b')
+        # print('b')
         optimizer.zero_grad()
-        print('c')
+        # print('c')
         if args.dataset == 'MNIST':
             outputs, aux = net(inputs)
         else:
             outputs = net(inputs)
-        print('d')
+        # print('d')
         loss = criterion(outputs, targets)
-        print('e')
+        # print('e')
         loss.backward()
-        print('f')
+        # print('f')
         optimizer.step()
-        print('g')
+        # print('g')
 
         train_loss += loss.item()
         _, predicted = outputs.max(1)
