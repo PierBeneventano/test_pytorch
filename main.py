@@ -233,7 +233,7 @@ def train(epoch):
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
         # print('a', batch_idx, len(targets))
-        
+
         #Label noise case
         if args.label_noise > 0:
             if args.ln_sched == 'fixed':
@@ -242,7 +242,7 @@ def train(epoch):
                 label_noise = optim_util.ln_decay(args.label_noise, epoch, args.ln_decay)
             
             targets = optim_util.apply_label_noise(targets, label_noise,
-				num_classes=10 if args.dataset == 'cifar10' else 100)
+				num_classes=100 if args.dataset == 'cifar100' else 10)
 
         inputs, targets = inputs.to(device), targets.to(device)
         # print('b')
