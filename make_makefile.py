@@ -9,7 +9,7 @@ def create_makefile(choice_dict):
     f.write("setup:\n")
     for net_choice in choice_dict['net']:
         for dataset_choice in choice_dict['dataset']:
-            f.write(f"\t@python main.py --net {choice} --dataset {dataset_choice}\n")
+            f.write(f"\t@python main.py --net {net_choice} --dataset {dataset_choice}\n")
     
 
 if __name__ == "__main__":
