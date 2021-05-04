@@ -21,5 +21,5 @@ if __name__ == "__main__":
 
     choice_dict['net'] = net_choices
     choice_dict['dataset'] = dataset_choices
-    create_makefile(choices_dict)
+    create_makefile(choice_dict)
     
