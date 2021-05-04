@@ -308,7 +308,8 @@ def test(epoch):
         if not os.path.isdir('checkpoint'):
             os.mkdir('checkpoint')
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob{}-ln_decay.pt'.format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched))
+        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob{}-ln_decay{}-batch_size{}.pt'
+                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
         best_acc = acc
 
 
