@@ -26,9 +26,9 @@ def create_makefile(choice_dict):
     for i in [128, 1024]:
         for ln_choice in choice_dict['label_noise_prob']:
             for ln_sched_choice in choice_dict['ln_sched']:
-                f.write(f"\t@python main.py --dataset 'MNIST' --label_noise {ln_choice} --ln_sched {ln_sched_choice} --batchsize{i} \n")
+                f.write(f"\t@python main.py --dataset 'MNIST' --label_noise {ln_choice} --ln_sched {ln_sched_choice} --batchsize {i} \n")
                 for net_choice in choice_dict['net']:
-                    f.write(f"\t@python main.py --net {net_choice} --label_noise {ln_choice} --ln_sched {ln_sched_choice} --batchsize{i} \n")
+                    f.write(f"\t@python main.py --net {net_choice} --label_noise {ln_choice} --ln_sched {ln_sched_choice} --batchsize {i} \n")
     
 
 if __name__ == "__main__":
