@@ -14,7 +14,7 @@ def create_makefile(choice_dict):
 
 if __name__ == "__main__":
     # creating choice dictionary
-    choice_dict = []
+    choice_dict = {}
 
     net_choices = np.array(['vgg', 'densenet', 'dla'])
     dataset_choices = np.array(['cifar10', 'MNIST'])
