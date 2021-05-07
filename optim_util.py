@@ -38,3 +38,14 @@ def ln_decay(noise_prob, epoch, ln_decay=0.5):
 	prob = noise_prob*(ln_decay**int(epoch >= 150))
 	prob *= (ln_decay**int(epoch >= 250))
 	return prob
+
+def apply_gaussian_noise(inputs, sigma):
+	new_inputs = inputs
+	for i in new_inputs:
+			i = i + torch.randn(1)*sigma
+	return new_inputs
+
+def lg_decay(sigma, epoch, lg_decay=0.5):
+	sigma_new = sigma*(lg_decay**int(epoch >= 150))
+	sigma_new *= (lg_decay**int(epoch >= 250))
+	return sigma_new

@@ -36,12 +36,18 @@ parser.add_argument('--optim_type', choices=['sgd', 'adam'], default='sgd')
 parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
 parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
 					help='weight decay (default: 5e-4)')
+# Gaussian noise related
+parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
+parser.add_argument('--gn_sched', choices=['fixed', 'decay'], default='fixed',
+					help='schedule of the Gaussian noise.')
+parser.add_argument('--gn_decay', type=float, default=0.5,
+					help='how much to multiply by, when we decay in Gaussian noise')
 # Label noise related
 parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
 parser.add_argument('--ln_sched', choices=['fixed', 'decay'], default='fixed',
 					help='schedule of the label noise.')
 parser.add_argument('--ln_decay', type=float, default=0.5,
-					help='how much to multiply by when we decay')
+					help='how much to multiply by, when we decay in label noise')
 
 args = parser.parse_args()
 
@@ -232,9 +238,9 @@ def train(epoch):
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
-        # print('a', batch_idx, len(targets))
+        # print(batch_idx, len(targets))
 
-        #Label noise case
+        # Label noise case
         if args.label_noise > 0:
             if args.ln_sched == 'fixed':
                 label_noise = args.label_noise
@@ -243,28 +249,37 @@ def train(epoch):
             
             targets = optim_util.apply_label_noise(targets, label_noise,
 				num_classes=100 if args.dataset == 'cifar100' else 10)
+        
+        # Gaussian noise case
+        if args.gaussian_noise > 0:
+            if args.gn_sched == 'fixed':
+                gaussian_noise = args.gaussian_noise
+            else:
+                gaussian_noise = optim_util.lg_decay(args.gaussian_noise, epoch, args.gn_decay)
+            
+            inputs = optim_util.apply_gaussian_noise(inputs, gaussian_noise)
+
 
         inputs, targets = inputs.to(device), targets.to(device)
-        # print('b')
         optimizer.zero_grad()
-        # print('c')
+
+        # Case of MNIST or cifar10
         if args.dataset == 'MNIST':
             outputs, aux = net(inputs)
         else:
             outputs = net(inputs)
-        # print('d')
+        
+
         loss = criterion(outputs, targets)
-        # print('e')
         loss.backward()
-        # print('f')
         optimizer.step()
-        # print('g')
 
         train_loss += loss.item()
         _, predicted = outputs.max(1)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
 
+        # Progress bar
         utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
@@ -311,6 +326,10 @@ def test(epoch):
         torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-ln_decay:{}-batch_size:{}.pt'
                     .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
         best_acc = acc
+
+
+np.random.seed(0)
+torch.manual_seed(0)
 
 
 for epoch in range(start_epoch, args.number_epochs):
