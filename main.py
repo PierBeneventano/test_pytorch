@@ -245,7 +245,7 @@ iter_number_per_epoch_test = len(testloader)
 
 def train(epoch):
     print('\nEpoch: %d' % epoch)
-    start_epoch = time.time()
+    starting_time_epoch = time.time()
     net.train()
     training_loss = 0
     correct = 0
@@ -299,7 +299,7 @@ def train(epoch):
 
     # Save data of this iteration
     end_epoch = time.time()
-    train_time[int(epoch)] = end_epoch-start_epoch
+    train_time[int(epoch)] = end_epoch-starting_time_epoch
     train_accuracy[int(epoch)] = 100.*correct/total
     train_loss[int(epoch)] = training_loss/iter_number_per_epoch
     
