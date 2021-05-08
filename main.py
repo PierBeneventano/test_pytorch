@@ -313,7 +313,7 @@ def train(epoch):
 def test(epoch):
     global best_acc
     net.eval()
-    interation_test_loss = 0
+    iteration_test_loss = 0
     correct = 0
     total = 0
     with torch.no_grad():
