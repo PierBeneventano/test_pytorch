@@ -42,11 +42,11 @@ def init_params(net):
             init.constant_(m.bias, 0)
 
 
-_, term_width = os.popen('stty size', 'r').read().split()
-term_width = int(term_width)-10
-# term_width=75 #(set the term_width to 80 directly)
+# _, term_width = os.popen('stty size', 'r').read().split()
+# term_width = int(term_width)
+term_width=100 #(set the term_width to 80 directly)
 
-TOTAL_BAR_LENGTH = 50.
+TOTAL_BAR_LENGTH = 60.
 last_time = time.time()
 begin_time = last_time
 def progress_bar(current, total, msg=None):
