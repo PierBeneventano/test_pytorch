@@ -239,6 +239,10 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
 
 # Training
+
+iter_number_per_epoch = len(trainloader)
+iter_number_per_epoch_test = len(testloader)
+
 def train(epoch):
     print('\nEpoch: %d' % epoch)
     start_epoch = time.time()
@@ -297,7 +301,7 @@ def train(epoch):
     end_epoch = time.time()
     train_time[int(epoch)] = end_epoch-start_epoch
     train_accuracy[int(epoch)] = 100.*correct/total
-    train_loss[int(epoch)] = train_loss/(batch_idx+1)
+    train_loss[int(epoch)] = train_loss/iter_number_per_epoch
     
     # if epoch %10 == 0:
     #     # comput the gradient
@@ -330,7 +334,7 @@ def test(epoch):
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     test_accuracy[int(epoch)] = 100.*correct/total
-    test_loss[int(epoch)] = test_loss/(batch_idx+1)
+    test_loss[int(epoch)] = test_loss/iter_number_per_epoch_test
 
     # Save checkpoint.
     acc = 100.*correct/total
