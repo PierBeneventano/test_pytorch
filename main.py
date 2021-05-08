@@ -162,6 +162,10 @@ examples = enumerate(testloader)
 batch_idx, (example_data, example_targets) = next(examples)
 example_data.shape
 
+for i in range(6):
+  print('the min entry in the example i is', torch.min(example_data[i][0]))
+  print('the max entry in the example i is', torch.max(example_data[i][0]))
+
 fig = plt.figure()
 for i in range(6):
   plt.subplot(2,3,i+1)
