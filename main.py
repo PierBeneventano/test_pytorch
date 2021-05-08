@@ -63,6 +63,14 @@ best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
 
+# initialize the vectors with the features to save
+
+train_accuracy = np.zeros(args.number_epochs)
+train_loss = np.zeros(args.number_epochs)
+test_accuracy = np.zeros(args.number_epochs)
+test_loss = np.zeros(args.number_epochs)
+
+
 # Data I want all the data pipeline in another file
 print('==> Preparing data..')
 if args.dataset == 'cifar10':
@@ -283,6 +291,15 @@ def train(epoch):
         utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
+    # Save data of this iteration
+    train_accuracy[epoch] = 100.*correct/total
+    train_loss[epoch] = train_loss/(batch_idx+1)
+    
+    if epoch %10 == 0:
+        # comput the gradient
+        2+2
+
+
 
 
 def test(epoch):
@@ -308,6 +325,9 @@ def test(epoch):
             utils.progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
+    test_accuracy[epoch] = 100.*correct/total
+    test_loss[epoch] = train_loss/(batch_idx+1)
+
     # Save checkpoint.
     acc = 100.*correct/total
     if acc > best_acc:
@@ -320,8 +340,8 @@ def test(epoch):
             'net': net.state_dict(),
             'optimizer': optimizer.state_dict(),
         }
-        if not os.path.isdir('checkpoint'):
-            os.mkdir('checkpoint')
+        if not os.path.isdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net)):
+            os.mkdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net))
         torch.save(state, './checkpoint/ckpt.pt')
         torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-ln_decay:{}-batch_size:{}.pt'
                     .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
@@ -336,3 +356,24 @@ for epoch in range(start_epoch, args.number_epochs):
     train(epoch)
     test(epoch)
     scheduler.step()
+
+# Final saving
+
+print('Final saving...')
+state = {
+        'best_acc': best_acc,
+        'epoch': epoch+1,
+        'architecture':args.net,
+        'dataset': args.dataset,
+        'net': net.state_dict(),
+        'optimizer': optimizer.state_dict(),
+        'test_acc_array': test_accuracy,
+        'test_loss_array': test_loss,
+        'train_acc_array': train_accuracy,
+        'train_loss_array': train_loss,
+}
+if not os.path.isdir('checkpoint/final'):
+        os.mkdir('checkpoint/final')
+torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-ln_decay:{}-batch_size:{}.pt'
+                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
+best_acc = acc
