@@ -324,7 +324,7 @@ def test(epoch):
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     test_accuracy[int(epoch)] = 100.*correct/total
-    test_loss.append[int(epoch)] = train_loss/(batch_idx+1)
+    test_loss[int(epoch)] = train_loss/(batch_idx+1)
 
     # Save checkpoint.
     acc = 100.*correct/total
