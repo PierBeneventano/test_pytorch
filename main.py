@@ -36,17 +36,12 @@ parser.add_argument('--optim_type', choices=['sgd', 'adam'], default='sgd')
 parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
 parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
 					help='weight decay (default: 5e-4)')
-# Gaussian noise related
+# Noise infection related
 parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
-parser.add_argument('--gn_sched', choices=['fixed', 'decay'], default='fixed',
-					help='schedule of the Gaussian noise.')
-parser.add_argument('--gn_decay', type=float, default=0.5,
-					help='how much to multiply by, when we decay in Gaussian noise')
-# Label noise related
 parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
-parser.add_argument('--ln_sched', choices=['fixed', 'decay'], default='fixed',
+parser.add_argument('--noise_sched', choices=['fixed', 'decay'], default='fixed',
 					help='schedule of the label noise.')
-parser.add_argument('--ln_decay', type=float, default=0.5,
+parser.add_argument('--noise_decay', type=float, default=0.5,
 					help='how much to multiply by, when we decay in label noise')
 
 args = parser.parse_args()
@@ -204,6 +199,7 @@ if args.resume:
     net.load_state_dict(checkpoint['net'])
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
+    args.net = checkpoint['architecture']
 
 if args.loss == 'cross_entropy':
 	criterion = nn.CrossEntropyLoss().cuda()
@@ -250,20 +246,20 @@ def train(epoch):
 
         # Label noise case
         if args.label_noise > 0:
-            if args.ln_sched == 'fixed':
+            if args.noise_sched == 'fixed':
                 label_noise = args.label_noise
             else:
-                label_noise = optim_util.ln_decay(args.label_noise, epoch, args.ln_decay)
+                label_noise = optim_util.noise_decay(args.label_noise, epoch, args.noise_decay)
             
             targets = optim_util.apply_label_noise(targets, label_noise,
 				num_classes=100 if args.dataset == 'cifar100' else 10)
         
         # Gaussian noise case
         if args.gaussian_noise > 0:
-            if args.gn_sched == 'fixed':
+            if args.noise_sched == 'fixed':
                 gaussian_noise = args.gaussian_noise
             else:
-                gaussian_noise = optim_util.lg_decay(args.gaussian_noise, epoch, args.gn_decay)
+                gaussian_noise = optim_util.noise_decay(args.gaussian_noise, epoch, args.noise_decay)
             
             inputs = optim_util.apply_gaussian_noise(inputs, gaussian_noise)
 
@@ -343,8 +339,8 @@ def test(epoch):
         if not os.path.isdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net)):
             os.mkdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net))
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-ln_decay:{}-batch_size:{}.pt'
-                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
+        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
         best_acc = acc
 
 
@@ -361,19 +357,18 @@ for epoch in range(start_epoch, args.number_epochs):
 
 print('Final saving...')
 state = {
-        'best_acc': best_acc,
-        'epoch': epoch+1,
-        'architecture':args.net,
-        'dataset': args.dataset,
-        'net': net.state_dict(),
-        'optimizer': optimizer.state_dict(),
-        'test_acc_array': test_accuracy,
-        'test_loss_array': test_loss,
-        'train_acc_array': train_accuracy,
-        'train_loss_array': train_loss,
+    'best_acc': best_acc,
+    'epoch': epoch+1,
+    'architecture':args.net,
+    'dataset': args.dataset,
+    'net': net.state_dict(),
+    'optimizer': optimizer.state_dict(),
+    'test_acc_array': test_accuracy,
+    'test_loss_array': test_loss,
+    'train_acc_array': train_accuracy,
+    'train_loss_array': train_loss,
 }
 if not os.path.isdir('checkpoint/final'):
-        os.mkdir('checkpoint/final')
-torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-ln_decay:{}-batch_size:{}.pt'
-                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.ln_sched, args.batchsize))
-best_acc = acc
+    os.mkdir('checkpoint/final')
+torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+            .format(args.dataset, args.net, epoch+1, args.label_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
