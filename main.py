@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 
 import os
 import argparse
+import time
 
 from models import *
 import utils
@@ -61,6 +62,7 @@ start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 # initialize the vectors with the features to save
 
 train_accuracy = np.zeros(args.number_epochs)
+train_time = np.zeros(args.number_epochs)
 train_loss = np.zeros(args.number_epochs)
 test_accuracy = np.zeros(args.number_epochs)
 test_loss = np.zeros(args.number_epochs)
@@ -239,6 +241,7 @@ scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 # Training
 def train(epoch):
     print('\nEpoch: %d' % epoch)
+    start_epoch = time.time()
     net.train()
     train_loss = 0
     correct = 0
@@ -285,17 +288,20 @@ def train(epoch):
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
 
+
         # Progress bar
         utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save data of this iteration
+    end_epoch = time.time()
+    train_time[int(epoch)] = end_epoch-start_epoch
     train_accuracy[int(epoch)] = 100.*correct/total
-    train_accuracy[int(epoch)] = train_loss/(batch_idx+1)
+    train_loss[int(epoch)] = train_loss/(batch_idx+1)
     
-    if epoch %10 == 0:
-        # comput the gradient
-        2+2
+    # if epoch %10 == 0:
+    #     # comput the gradient
+    #     2+2
 
 
 
@@ -324,7 +330,7 @@ def test(epoch):
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     test_accuracy[int(epoch)] = 100.*correct/total
-    test_loss[int(epoch)] = train_loss/(batch_idx+1)
+    test_loss[int(epoch)] = test_loss/(batch_idx+1)
 
     # Save checkpoint.
     acc = 100.*correct/total
@@ -369,6 +375,7 @@ state = {
     'test_loss_array': test_loss,
     'train_acc_array': train_accuracy,
     'train_loss_array': train_loss,
+    'train_time': train_time,
 }
 if not os.path.isdir('checkpoint/final'):
     os.mkdir('checkpoint/final')

@@ -12,3 +12,5 @@ dependencies:
   - pytorch
   - torchvision
   - requests
+  - time
+  - cudatoolkit
