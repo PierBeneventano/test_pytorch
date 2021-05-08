@@ -39,6 +39,7 @@ parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
 					help='weight decay (default: 5e-4)')
 # Noise infection related
 parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
+parser.add_argument('--input_gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the input gaussian noise.')
 parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
 parser.add_argument('--noise_sched', choices=['fixed', 'decay'], default='fixed',
 					help='schedule of the label noise.')
@@ -268,17 +269,28 @@ def train(epoch):
 				num_classes=100 if args.dataset == 'cifar100' else 10)
         
         # Gaussian noise case
+        if args.input_gaussian_noise > 0:
+            if args.noise_sched == 'fixed':
+                input_gaussian_noise = args.input_gaussian_noise
+            else:
+                input_gaussian_noise = optim_util.noise_decay(args.input_gaussian_noise, epoch, args.noise_decay)
+            
+            inputs = optim_util.apply_gaussian_noise(inputs, input_gaussian_noise)
+
+
+        inputs, targets = inputs.to(device), targets.to(device)
+        optimizer.zero_grad()
+
+        # Case of gaussian noise on gradient
         if args.gaussian_noise > 0:
             if args.noise_sched == 'fixed':
                 gaussian_noise = args.gaussian_noise
             else:
                 gaussian_noise = optim_util.noise_decay(args.gaussian_noise, epoch, args.noise_decay)
-            
-            inputs = optim_util.apply_gaussian_noise(inputs, gaussian_noise)
-
-
-        inputs, targets = inputs.to(device), targets.to(device)
-        optimizer.zero_grad()
+            orig_params = []
+            for p in net.parameters():
+	            orig_params.append(p.clone())
+	            p.data = (p.data + gaussian_noise*np.random.normal(loc=0, scale=torch.ones_like(p))).float()
 
         # Case of MNIST or cifar10
         if args.dataset == 'MNIST':
@@ -289,6 +301,12 @@ def train(epoch):
 
         loss = criterion(outputs, targets)
         loss.backward()
+
+        # Case of gaussian noise on gradient
+        if args.gaussian_noise > 0:
+            for p, orig_p in zip(net.parameters(), orig_params):
+                p.data = orig_p.data
+
         optimizer.step()
 
         training_loss += loss.item()
@@ -355,8 +373,8 @@ def test(epoch):
         if not os.path.isdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net)):
             os.mkdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net))
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
-                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
+        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-input_gaussian_noise_SD:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
         best_acc = acc
 
 
@@ -387,5 +405,5 @@ state = {
 }
 if not os.path.isdir('checkpoint/final'):
     os.mkdir('checkpoint/final')
-torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
-            .format(args.dataset, args.net, epoch+1, args.label_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
+torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-input_gaussian_noise:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+            .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))

@@ -18,7 +18,7 @@ def create_makefile(choice_dict):
     for net_choice in choice_dict['net']:
         f.write(f"\t@python main.py --net {net_choice} --batchsize 1024\n")
 
-    # Imput Gaussian noise
+    # Gradient noise
     for i in [128, 1024]:
         for lg_choice in choice_dict['gaussian_noise_sigma']:
             for lg_sched_choice in choice_dict['noise_sched']:
@@ -26,7 +26,13 @@ def create_makefile(choice_dict):
                 for net_choice in choice_dict['net']:
                     f.write(f"\t@python main.py --net {net_choice} --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
 
-    # Gradient noise
+    # Imput Gaussian noise
+    for i in [128, 1024]:
+        for lg_choice in choice_dict['gaussian_noise_sigma']:
+            for lg_sched_choice in choice_dict['noise_sched']:
+                f.write(f"\t@python main.py --dataset 'MNIST' --input_gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
+                for net_choice in choice_dict['net']:
+                    f.write(f"\t@python main.py --net {net_choice} --input_gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
 
     # SGD + label noise
     for i in [128, 1024]:
