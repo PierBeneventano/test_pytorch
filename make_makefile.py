@@ -24,7 +24,7 @@ def create_makefile(choice_dict):
             for lg_sched_choice in choice_dict['noise_sched']:
                 f.write(f"\t@python main.py --dataset 'MNIST' --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
                 for net_choice in choice_dict['net']:
-                    f.write(f"\t@python main.py --net {net_choice} --gaussian_noise {ln_choice} --noise_sched {ln_sched_choice} --batchsize {i} \n")
+                    f.write(f"\t@python main.py --net {net_choice} --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
 
     # Gradient noise
 
