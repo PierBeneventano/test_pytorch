@@ -370,10 +370,10 @@ def test(epoch):
             'net': net.state_dict(),
             'optimizer': optimizer.state_dict(),
         }
-        if not os.path.isdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net)):
-            os.mkdir('checkpoint/training_dataset:{}-model:{}'.format(args.dataset, args.net))
+        if not os.path.isdir('checkpoint/training/dataset:{}-model:{}'.format(args.dataset, args.net)):
+            os.mkdir('checkpoint/training/dataset:{}-model:{}'.format(args.dataset, args.net))
         torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-input_gaussian_noise_SD:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+        torch.save(state, './checkpoint/training/dataset:{}-model:{}/epoch:{}-label_noise_prob:{}-input_gaussian_noise_SD:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
                     .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
         best_acc = acc
 
