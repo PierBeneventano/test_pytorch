@@ -247,7 +247,7 @@ def train(epoch):
     print('\nEpoch: %d' % epoch)
     start_epoch = time.time()
     net.train()
-    train_loss = 0
+    training_loss = 0
     correct = 0
     total = 0
     for batch_idx, (inputs, targets) in enumerate(trainloader):
@@ -287,7 +287,7 @@ def train(epoch):
         loss.backward()
         optimizer.step()
 
-        train_loss += loss.item()
+        training_loss += loss.item()
         _, predicted = outputs.max(1)
         total += targets.size(0)
         correct += predicted.eq(targets).sum().item()
@@ -295,13 +295,13 @@ def train(epoch):
 
         # Progress bar
         utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                     % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
+                     % (training_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save data of this iteration
     end_epoch = time.time()
     train_time[int(epoch)] = end_epoch-start_epoch
     train_accuracy[int(epoch)] = 100.*correct/total
-    train_loss[int(epoch)] = train_loss/iter_number_per_epoch
+    train_loss[int(epoch)] = training_loss/iter_number_per_epoch
     
     # if epoch %10 == 0:
     #     # comput the gradient
@@ -313,7 +313,7 @@ def train(epoch):
 def test(epoch):
     global best_acc
     net.eval()
-    test_loss = 0
+    interation_test_loss = 0
     correct = 0
     total = 0
     with torch.no_grad():
@@ -325,16 +325,16 @@ def test(epoch):
                 outputs = net(inputs)
             loss = criterion(outputs, targets)
 
-            test_loss += loss.item()
+            iteration_test_loss += loss.item()
             _, predicted = outputs.max(1)
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
             utils.progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                         % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
+                         % (iteration_test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     test_accuracy[int(epoch)] = 100.*correct/total
-    test_loss[int(epoch)] = test_loss/iter_number_per_epoch_test
+    test_loss[int(epoch)] = iteration_test_loss/iter_number_per_epoch_test
 
     # Save checkpoint.
     acc = 100.*correct/total
