@@ -60,14 +60,14 @@ start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
 # initialize the vectors with the features to save
 
-# train_accuracy = np.zeros(args.number_epochs)
-# train_loss = np.zeros(args.number_epochs)
-# test_accuracy = np.zeros(args.number_epochs)
-# test_loss = np.zeros(args.number_epochs)
-train_accuracy = []
-train_loss = []
-test_accuracy = []
-test_loss = []
+train_accuracy = np.zeros(args.number_epochs)
+train_loss = np.zeros(args.number_epochs)
+test_accuracy = np.zeros(args.number_epochs)
+test_loss = np.zeros(args.number_epochs)
+# train_accuracy = []
+# train_loss = []
+# test_accuracy = []
+# test_loss = []
 
 
 # Data I want all the data pipeline in another file
@@ -290,8 +290,8 @@ def train(epoch):
                      % (train_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save data of this iteration
-    train_accuracy.append( 100.*correct/total )
-    train_loss.append( train_loss/(batch_idx+1))
+    train_accuracy[int(epoch)] = 100.*correct/total
+    train_accuracy[int(epoch)] = train_loss/(batch_idx+1)
     
     if epoch %10 == 0:
         # comput the gradient
@@ -323,8 +323,8 @@ def test(epoch):
             utils.progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
                          % (test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
-    test_accuracy.append( 100.*correct/total )
-    test_loss.append( train_loss/(batch_idx+1))
+    test_accuracy[int(epoch)] = 100.*correct/total
+    test_loss.append[int(epoch)] = train_loss/(batch_idx+1)
 
     # Save checkpoint.
     acc = 100.*correct/total
