@@ -12,8 +12,9 @@
 #SBATCH --mail-type=end          # send email when job ends
 #SBATCH --mail-user=pierb@princeton.edu
 
-module purge
 module load anaconda3
 conda activate pierPy
+conda activate torch-env
+module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
 
 make
