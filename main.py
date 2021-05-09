@@ -349,6 +349,7 @@ def test(epoch):
     iteration_test_loss = 0
     correct = 0
     total = 0
+    last_saved=0
     with torch.no_grad():
         for batch_idx, (inputs, targets) in enumerate(testloader):
             inputs, targets = inputs.to(device), targets.to(device)
@@ -371,22 +372,24 @@ def test(epoch):
 
     # Save checkpoint.
     acc = 100.*correct/total
-    if acc > best_acc:
-        print('Saving...')
-        state = {
-            'acc': acc,
-            'epoch': epoch+1,
-            'architecture':args.net,
-            'dataset': args.dataset,
-            'net': net.state_dict(),
-            'optimizer': optimizer.state_dict(),
-        }
-        if not os.path.isdir('/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
-            os.mkdir('/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
-        torch.save(state, '/scratch/gpfs/pb29/checkpoint/ckpt.pt')
-        torch.save(state, '/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
-                    .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
-        best_acc = acc
+    if int(epoch)-last_saved>=10:
+        last_saved = int(epoch)
+        if acc > best_acc:
+            print('Saving...')
+            state = {
+                'acc': acc,
+                'epoch': epoch+1,
+                'architecture':args.net,
+                'dataset': args.dataset,
+                'net': net.state_dict(),
+                'optimizer': optimizer.state_dict(),
+            }
+            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
+                os.mkdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
+            torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
+            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+                        .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
+            best_acc = acc
 
 
 np.random.seed(0)
@@ -417,7 +420,7 @@ state = {
     'train_loss_array': train_loss,
     'train_time': train_time,
 }
-if not os.path.isdir('/scratch/gpfs/pb29/checkpoint/final'):
-    os.mkdir('/scratch/gpfs/pb29/checkpoint/final')
-torch.save(state, '/scratch/gpfs/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+if not os.path.isdir('/tigress/pb29/checkpoint/final'):
+    os.mkdir('/tigress/pb29/checkpoint/final')
+torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
             .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
