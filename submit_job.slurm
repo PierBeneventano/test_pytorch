@@ -16,6 +16,6 @@
 module purge
 module load anaconda3/2020.11
 module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
-conda activate pierPy
+conda activate torch-env
 
 make
