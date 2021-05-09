@@ -386,8 +386,9 @@ torch.manual_seed(0)
 for epoch in range(start_epoch, args.number_epochs):
     train(epoch)
     test(epoch)
-    print('Training accuracy: %.3f, training loss: %.3f, time of the epoch: %.3fs, test accuracy: %.3f, test loss: %.3f',
-    train_accuracy[int(epoch)], train_loss[int(epoch)], train_time[int(epoch)], test_accuracy[int(epoch)], test_loss[int(epoch)])
+    print('Training accuracy:',
+    train_accuracy[int(epoch)], ', training loss: ', train_loss[int(epoch)], ', time of the epoch: ', train_time[int(epoch)],
+    's, test accuracy: ', test_accuracy[int(epoch)], ', test loss: ', test_loss[int(epoch)])
     scheduler.step()
 
 # Final saving
