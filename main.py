@@ -316,9 +316,9 @@ def train(epoch):
         correct += predicted.eq(targets).sum().item()
 
 
-        # Progress bar
-        utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                     % (training_loss/(batch_idx+1), 100.*correct/total, correct, total))
+        # # Progress bar
+        # utils.progress_bar(batch_idx, len(trainloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+        #              % (training_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     # Save data of this iteration
     end_epoch = time.time()
@@ -353,8 +353,8 @@ def test(epoch):
             total += targets.size(0)
             correct += predicted.eq(targets).sum().item()
 
-            utils.progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
-                         % (iteration_test_loss/(batch_idx+1), 100.*correct/total, correct, total))
+            # utils.progress_bar(batch_idx, len(testloader), 'Loss: %.3f | Acc: %.3f%% (%d/%d)'
+            #              % (iteration_test_loss/(batch_idx+1), 100.*correct/total, correct, total))
 
     test_accuracy[int(epoch)] = 100.*correct/total
     test_loss[int(epoch)] = iteration_test_loss/iter_number_per_epoch_test
@@ -386,6 +386,8 @@ torch.manual_seed(0)
 for epoch in range(start_epoch, args.number_epochs):
     train(epoch)
     test(epoch)
+    print('Epoch number: {}, training accuracy: {}, training loss: {}, time of the epoch: {}, test accuracy: {}, test loss: {}'
+    .format(epoch+1, train_accuracy[int(epoch)], train_loss[int(epoch)], train_time[int(epoch)], test_accuracy[int(epoch)], test_loss[int(epoch)]))
     scheduler.step()
 
 # Final saving
