@@ -58,6 +58,7 @@ for arg in vars(args):
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 if device == 'cpu':
     print('error: working with cpu')
+    
 best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
