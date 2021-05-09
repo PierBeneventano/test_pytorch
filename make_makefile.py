@@ -3,7 +3,7 @@ import numpy as np
 cwd = os.getcwd()   # get the current working directory
 
 def create_makefile(choice_dict):
-    f = open(f"{cwd}/makefile","w")
+    f = open(f'{cwd}/makefile','w')
     f.write(".PHONY = help setup test run clean environment\n\n")
     f.write(".DEFAULT_GOAL = setup\n")
     f.write("setup:\n")
