@@ -60,6 +60,7 @@ best_acc = 0  # best test accuracy
 start_epoch = 0  # start from epoch 0 or last checkpoint epoch
 
 
+
 # initialize the vectors with the features to save
 
 train_accuracy = np.zeros(args.number_epochs)
@@ -205,8 +206,8 @@ if device == 'cuda':
 if args.resume:
     # Load checkpoint.
     print('==> Resuming from checkpoint..')
-    assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'
-    checkpoint = torch.load('./checkpoint/ckpt.pth')
+    assert os.path.isdir(f'{scratch_loc}checkpoint'), 'Error: no checkpoint directory found!'
+    checkpoint = torch.load(f'{scratch_loc}checkpoint/ckpt.pth')
     net.load_state_dict(checkpoint['net'])
     best_acc = checkpoint['acc']
     start_epoch = checkpoint['epoch']
@@ -370,10 +371,10 @@ def test(epoch):
             'net': net.state_dict(),
             'optimizer': optimizer.state_dict(),
         }
-        if not os.path.isdir('checkpoint/training/dataset:{}-model:{}'.format(args.dataset, args.net)):
-            os.mkdir('checkpoint/training/dataset:{}-model:{}'.format(args.dataset, args.net))
-        torch.save(state, './checkpoint/ckpt.pt')
-        torch.save(state, './checkpoint/training/dataset:{}-model:{}/epoch:{}-label_noise_prob:{}-input_gaussian_noise_SD:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+        if not os.path.isdir('/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
+            os.mkdir('/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
+        torch.save(state, '/scratch/gpfs/pb29/checkpoint/ckpt.pt')
+        torch.save(state, '/scratch/gpfs/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
                     .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
         best_acc = acc
 
@@ -403,7 +404,7 @@ state = {
     'train_loss_array': train_loss,
     'train_time': train_time,
 }
-if not os.path.isdir('checkpoint/final'):
-    os.mkdir('checkpoint/final')
-torch.save(state, './checkpoint/final/FINAL_dataset:{}-model:{}-epoch:{}-label_noise_prob:{}-input_gaussian_noise:{}-gaussian_noise_SD:{}-noise_decay:{}-batch_size:{}.pt'
+if not os.path.isdir('/scratch/gpfs/pb29/checkpoint/final'):
+    os.mkdir('/scratch/gpfs/pb29/checkpoint/final')
+torch.save(state, '/scratch/gpfs/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
             .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
