@@ -29,7 +29,7 @@ parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], defau
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
 parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
-parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better or not')
+# parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better and it did not save in the previous 10')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 # Optimizer related
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
