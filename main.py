@@ -372,7 +372,7 @@ def test(epoch):
 
     # Save checkpoint.
     acc = 100.*correct/total
-    if int(epoch)-last_saved>=10:
+    if (int(epoch)-last_saved) >= 10 :
         last_saved = int(epoch)
         if acc > best_acc:
             print('Saving...')
