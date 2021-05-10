@@ -11,7 +11,7 @@ def create_makefile(choice_dict):
 
 
     # Imput Gaussian noise
-    for i in [128, 1024]:
+    for i in [64, 4096]:
         for lg_choice in choice_dict['gaussian_noise_sigma']:
             for lg_sched_choice in choice_dict['noise_sched']:
                 f.write(f"\t@python main.py --dataset 'MNIST' --input_gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")

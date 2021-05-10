@@ -10,7 +10,7 @@ def create_makefile(choice_dict):
 
 
     # SGD + label noise
-    for i in [128, 1024]:
+    for i in [64, 4096]:
         for ln_choice in choice_dict['label_noise_prob']:
             for ln_sched_choice in choice_dict['noise_sched']:
                 f.write(f"\t@python main.py --dataset 'MNIST' --label_noise {ln_choice} --noise_sched {ln_sched_choice} --batchsize {i} \n")
