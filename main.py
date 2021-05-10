@@ -301,7 +301,9 @@ def train(epoch):
             orig_params = []
             for p in net.parameters():
 	            orig_params.append(p.clone())
-	            p.data = (p.data + gaussian_noise*np.random.normal(loc=0, scale=torch.ones_like(p))).float()
+	            p.data = p.data + gaussian_noise*torch.randn(p.size())
+                # p.data = (p.data + gaussian_noise*np.random.normal(loc=0, scale=torch.ones_like(p))).float()
+
 
         # Case of MNIST or cifar10
         if args.dataset == 'MNIST':
