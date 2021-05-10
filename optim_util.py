@@ -43,4 +43,4 @@ def apply_gaussian_noise(inputs, sigma):
 def noise_decay(noise, epoch, noise_decay=0.5):
 	noise_new = noise*(noise_decay**int(epoch >= 150))
 	noise_new *= (noise_decay**int(epoch >= 250))
-	return prob
+	return noise_new
