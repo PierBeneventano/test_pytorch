@@ -301,7 +301,7 @@ def train(epoch):
             orig_params = []
             for p in net.parameters():
 	            orig_params.append(p.clone())
-	            p.data = p.data + gaussian_noise*torch.randn(p.size())
+	            p.data = p.data.to(device) + gaussian_noise*torch.randn(p.size()).to(device)
                 # p.data = (p.data + gaussian_noise*np.random.normal(loc=0, scale=torch.ones_like(p))).float()
 
 
