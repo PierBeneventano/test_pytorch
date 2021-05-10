@@ -8,6 +8,10 @@ def create_makefile(choice_dict):
     f.write(".DEFAULT_GOAL = setup\n")
     f.write("setup:\n")
 
+    # plain sgd
+    f.write(f"\t@python main.py --dataset 'MNIST'\n")
+    for net_choice in choice_dict['net']:
+        f.write(f"\t@python main.py --net {net_choice}\n")
 
     # Gradient noise
     for lg_choice in choice_dict['gaussian_noise_sigma']:
