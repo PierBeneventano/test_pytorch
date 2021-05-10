@@ -387,7 +387,7 @@ def test(epoch):
             if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
                 os.mkdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}_1.pt'
                         .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
             best_acc = acc
 
@@ -422,5 +422,5 @@ state = {
 }
 if not os.path.isdir('/tigress/pb29/checkpoint/final'):
     os.mkdir('/tigress/pb29/checkpoint/final')
-torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}_1.pt'
             .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
