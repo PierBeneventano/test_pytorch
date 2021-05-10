@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=pyPier        # create a short name for your job
-#SBATCH --error=./slurm_out/slurm-%A.err  # error
-#SBATCH --output=./slurm_out/slurm-%A.out # output  slurm-%A.%a.out or /dev/null
+#SBATCH --error=./slurm_out/slurm-%A.err        # error
+#SBATCH --output=./slurm_out/slurm-%A.out       # output  slurm-%A.%a.out or /dev/null
 #SBATCH --nodes=1                # node count
 #SBATCH --ntasks=1               # total number of tasks across all nodes
 #SBATCH --cpus-per-task=10       # cpu-cores per task (>1 if multi-threaded tasks)
