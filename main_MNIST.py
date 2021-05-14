@@ -127,7 +127,8 @@ def test(model, device, test_loader, epoch):
 
     iteration_test_loss /= len(test_loader.dataset)
 
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    print('\nEpoch {}, Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        epoch,
         iteration_test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
@@ -158,6 +159,10 @@ def test(model, device, test_loader, epoch):
 
 def main():
     # Training settings
+    print("The arguments are: \n")
+    args = parser.parse_args()
+    for arg in vars(args):
+	    print(arg, " : ", getattr(args, arg))
 
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
