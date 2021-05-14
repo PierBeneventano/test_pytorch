@@ -3,7 +3,9 @@ data
 makefile
 tiger_files
 slurm_out
+Samy_slurm.slurm
 *~
 *.pt
 *.ipynb
 *.pdf
+.ipynb_checkpoints

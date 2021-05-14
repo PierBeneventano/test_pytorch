@@ -13,6 +13,8 @@ def create_makefile(choice_dict):
             f.write(f"\t@python main.py main_MNIST.py --lr {lr_choices} --batchsize {batch_size}\n")
             for ln_choice in choice_dict['label_noise_prob']:
                 f.write(f"\t@python main.py main_MNIST.py --label_noise {ln_choice} --lr {lr_choices} --batchsize {batch_size}\n")
+            for lg_sched_choice in choice_dict['noise_sched']:
+                f.write(f"\t@python main.py main_MNIST.py --input_gaussian_noise {ln_choice} --lr {lr_choices} --batchsize {batch_size}\n")
 
 
 if __name__ == "__main__":
