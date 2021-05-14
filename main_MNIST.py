@@ -18,6 +18,39 @@ import optim_util
 from models import *
 
 
+parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+parser.add_argument('--batchsize', type=int, default=64, metavar='N',
+                        help='input batch size for training (default: 64)')
+parser.add_argument('--test_batchsize', type=int, default=1000, metavar='N',
+                        help='input batch size for testing (default: 1000)')
+parser.add_argument('--epochs', type=int, default=14, metavar='N',
+                        help='number of epochs to train (default: 14)')
+parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
+                        help='learning rate (default: 1.0)')
+parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
+                        help='Learning rate step gamma (default: 0.7)')
+parser.add_argument('--no-cuda', action='store_true', default=False,
+                        help='disables CUDA training')
+parser.add_argument('--dry-run', action='store_true', default=False,
+                        help='quickly check a single pass')
+parser.add_argument('--seed', type=int, default=1, metavar='S',
+                        help='random seed (default: 1)')
+parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+                        help='how many batches to wait before logging training status')
+parser.add_argument('--save-model', action='store_true', default=False,
+                        help='For Saving the current Model')
+# Noise injection related
+parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
+parser.add_argument('--input_gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the input gaussian noise.')
+parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
+parser.add_argument('--noise_sched', choices=['fixed', 'decay'], default='fixed',
+                help='schedule of the label noise.')
+parser.add_argument('--noise_decay', type=float, default=0.5,
+                help='how much to multiply by, when we decay in label noise')
+
+args = parser.parse_args()
+
+
 best_acc = 0
 train_accuracy = np.zeros(args.epochs)
 train_time = np.zeros(args.epochs)
@@ -125,37 +158,7 @@ def test(model, device, test_loader, epoch):
 
 def main():
     # Training settings
-    parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batchsize', type=int, default=64, metavar='N',
-                        help='input batch size for training (default: 64)')
-    parser.add_argument('--test_batchsize', type=int, default=1000, metavar='N',
-                        help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=14, metavar='N',
-                        help='number of epochs to train (default: 14)')
-    parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
-                        help='learning rate (default: 1.0)')
-    parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
-                        help='Learning rate step gamma (default: 0.7)')
-    parser.add_argument('--no-cuda', action='store_true', default=False,
-                        help='disables CUDA training')
-    parser.add_argument('--dry-run', action='store_true', default=False,
-                        help='quickly check a single pass')
-    parser.add_argument('--seed', type=int, default=1, metavar='S',
-                        help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-                        help='how many batches to wait before logging training status')
-    parser.add_argument('--save-model', action='store_true', default=False,
-                        help='For Saving the current Model')
-    # Noise injection related
-    parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
-    parser.add_argument('--input_gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the input gaussian noise.')
-    parser.add_argument('--label_noise', default=0, type=float, help='probability of having label noise.')
-    parser.add_argument('--noise_sched', choices=['fixed', 'decay'], default='fixed',
-					help='schedule of the label noise.')
-    parser.add_argument('--noise_decay', type=float, default=0.5,
-					help='how much to multiply by, when we decay in label noise')
 
-    args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
 
     torch.manual_seed(args.seed)
