@@ -60,6 +60,9 @@ def train(args, model, device, train_loader, optimizer, epoch):
     training_loss = 0
     correct = 0
     total = 0
+    global train_time
+    global train_accuracy
+    global train_loss
     starting_time_epoch = time.time()
     
     model.train()
@@ -113,6 +116,9 @@ def test(model, device, test_loader, epoch):
     iteration_test_loss = 0
     correct = 0
     last_saved = 0
+    global best_acc
+    global test_accuracy
+    global test_loss
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
