@@ -8,10 +8,11 @@ def create_makefile(choice_dict):
     f.write(".DEFAULT_GOAL = setup\n")
     f.write("setup:\n")
 
-    # full_batch
-    f.write(f"\t@python main.py --dataset 'MNIST' --batchsize 1024\n")
-    for net_choice in choice_dict['net']:
-        f.write(f"\t@python main.py --net {net_choice} --batchsize 1024\n")
+    for batch_size in [64, 128, 1024, 4096]:
+        for lr_choices in choice_dict['learning_rate']:
+    
+            for net_choice in choice_dict['net']:
+                f.write(f"\t@python main.py main_MNIST.py --net {net_choice} --lr {lr_choices} --batchsize {batch_size}\n")
 
 
     # Gradient noise
@@ -25,11 +26,11 @@ if __name__ == "__main__":
     # creating choice dictionary
     choice_dict = {}
 
-    net_choices = np.array(['vgg', 'densenet', 'dla'])
+    net_choices = np.array(['MLP', 'linear', 'conv'])
     label_noise_choices = np.array([0.5, 0.2, 0.1])
     g_noise_choices = np.array([0.2, 0.1, 0.02])
     noise_sched_choices = np.array(['decay', 'fixed'])
-    lr_choices = np.array([0.1, 0.01, 0.001])
+    lr_choices = np.array([0.1, 0.01, 1])
 
     choice_dict['net'] = net_choices
     choice_dict['label_noise_prob'] = label_noise_choices

@@ -98,7 +98,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batchsize', type=int, default=64, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--test_batch_size', type=int, default=1000, metavar='N',
+    parser.add_argument('--test_batchsize', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
     parser.add_argument('--epochs', type=int, default=14, metavar='N',
                         help='number of epochs to train (default: 14)')
@@ -132,8 +132,8 @@ def main():
 
     device = torch.device("cuda" if use_cuda else "cpu")
 
-    train_kwargs = {'batch_size': args.batch_size}
-    test_kwargs = {'batch_size': args.test_batch_size}
+    train_kwargs = {'batch_size': args.batchsize}
+    test_kwargs = {'batch_size': args.test_batchsize}
     if use_cuda:
         cuda_kwargs = {'num_workers': 1,
                        'pin_memory': True,
