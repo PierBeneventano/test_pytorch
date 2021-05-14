@@ -27,7 +27,7 @@ parser = argparse.ArgumentParser(description='PyTorch Neural Networks')
 parser.add_argument('--loss', choices=['l2', 'cross_entropy'], default='cross_entropy', help='what loss (criterion) to use')
 parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], default='cifar10', help='what dataset to use')
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
-parser.add_argument('--number_epochs', default=200, type=int, help='number of epoxhs')
+parser.add_argument('--epochs', default=200, type=int, help='number of epochs')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
 # parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better and it did not save in the previous 10')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
@@ -73,11 +73,11 @@ torch.cuda.manual_seed(seed)
 
 # initialize the vectors with the features to save
 
-train_accuracy = np.zeros(args.number_epochs)
-train_time = np.zeros(args.number_epochs)
-train_loss = np.zeros(args.number_epochs)
-test_accuracy = np.zeros(args.number_epochs)
-test_loss = np.zeros(args.number_epochs)
+train_accuracy = np.zeros(args.epochs)
+train_time = np.zeros(args.epochs)
+train_loss = np.zeros(args.epochs)
+test_accuracy = np.zeros(args.epochs)
+test_loss = np.zeros(args.epochs)
 # train_accuracy = []
 # train_loss = []
 # test_accuracy = []
@@ -398,7 +398,7 @@ np.random.seed(0)
 torch.manual_seed(0)
 
 
-for epoch in range(start_epoch, args.number_epochs):
+for epoch in range(start_epoch, args.epochs):
     train(epoch)
     test(epoch)
     print('Training accuracy:',

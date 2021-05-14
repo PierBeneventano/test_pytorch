@@ -117,11 +117,11 @@ def main():
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
-    train_accuracy = np.zeros(args.number_epochs)
-    train_time = np.zeros(args.number_epochs)
-    train_loss = np.zeros(args.number_epochs)
-    test_accuracy = np.zeros(args.number_epochs)
-    test_loss = np.zeros(args.number_epochs)
+    train_accuracy = np.zeros(args.epochs)
+    train_time = np.zeros(args.epochs)
+    train_loss = np.zeros(args.epochs)
+    test_accuracy = np.zeros(args.epochs)
+    test_loss = np.zeros(args.epochs)
 
     transform=transforms.Compose([
         transforms.ToTensor(),
