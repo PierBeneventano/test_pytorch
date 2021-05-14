@@ -9,8 +9,8 @@ def create_makefile(choice_dict):
     f.write("setup:\n")
 
 
-    f.write(f"\t@python main.py --input_gaussian_noise 0.02 --noise_sched 'decay' --batchsize 1024 \n")
-    f.write(f"\t@python main.py --dataset 'MNIST' --input_gaussian_noise 0.02 --noise_sched decay --batchsize 1024 \n")
+    f.write(f"\t@python main.py --label_noise 0.5 --noise_sched 'decay' --batchsize 1024 \n")
+    f.write(f"\t@python main.py --dataset 'MNIST' --label_noise 0.5 --noise_sched decay --batchsize 1024 \n")
     
 if __name__ == "__main__":
     # creating choice dictionary
