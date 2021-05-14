@@ -152,7 +152,7 @@ def test(model, device, test_loader, epoch):
                 os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
             torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-                        .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+                        .format(args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
 
@@ -197,7 +197,7 @@ def main():
 
 
 
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(0, args.epochs):
         train(args, model, device, train_loader, optimizer, epoch)
         test(model, device, test_loader, epoch)
         scheduler.step()
