@@ -129,9 +129,9 @@ def test(model, device, test_loader, epoch):
     print('\nEpoch {}, Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%), time:{}\n'.format(
         epoch,
         iteration_test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset,
+        100. * correct / len(test_loader.dataset),
         train_time[int(epoch)]
-        )))
+        ))
 
     test_accuracy[int(epoch)] = 100.*correct/len(test_loader.dataset)
     test_loss[int(epoch)] = iteration_test_loss/len(test_loader.dataset)
