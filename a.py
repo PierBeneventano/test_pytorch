@@ -18,11 +18,11 @@ train_time = checkpoint['train_time']
 
 print(dataset)
 print(best_acc)
-mpl.plot(train_time)
-mpl.plot(test_loss)
-mpl.plot(test_accuracy)
-mpl.plot(train_loss)
-mpl.plot(train_accuracy)
+# mpl.plot(train_time)
+# mpl.plot(test_loss)
+# mpl.plot(test_accuracy)
+# mpl.plot(train_loss)
+# mpl.plot(train_accuracy)
 
 print('train time', train_time)
 print('train loss', train_loss)
