@@ -9,15 +9,9 @@ def create_makefile(choice_dict):
     f.write("setup:\n")
 
 
-
-    # Imput Gaussian noise
-    for i in [64, 4096]:
-        for lg_choice in choice_dict['gaussian_noise_sigma']:
-            for lg_sched_choice in choice_dict['noise_sched']:
-                f.write(f"\t@python main.py --dataset 'MNIST' --input_gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
-                f.write(f"\t@python main.py --input_gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize {i} \n")
-
-
+    f.write(f"\t@python main.py --label_noise 0.2 --noise_sched 'decay' --batchsize 1024 \n")
+    f.write(f"\t@python main.py --dataset 'MNIST' --label_noise 0.2 --noise_sched decay --batchsize 1024 \n")
+    
 if __name__ == "__main__":
     # creating choice dictionary
     choice_dict = {}
