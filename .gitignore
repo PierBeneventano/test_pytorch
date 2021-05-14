@@ -6,3 +6,4 @@ slurm_out
 *~
 *.pt
 *.ipynb
+*.pdf
