@@ -19,3 +19,4 @@ from .dla import *
 
 from .multilayerp import *
 from .linearnet import *
+from .cnn_mnist import *

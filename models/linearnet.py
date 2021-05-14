@@ -6,7 +6,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 
-class LineatNet(nn.Module):
+class LinearNet(nn.Module):
 # I want to give as input the input dimension and the output dimension
     def __init__(self, depth=5, input_dim = [1,3,32,32], num_classes=10):
         super().__init__()
