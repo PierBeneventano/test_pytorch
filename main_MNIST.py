@@ -3,6 +3,9 @@
 
 from __future__ import print_function
 import argparse
+import os
+import time
+
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,6 +19,12 @@ from models import *
 
 
 def train(args, model, device, train_loader, optimizer, epoch):
+    
+    training_loss = 0
+    correct = 0
+    total = 0
+    starting_time_epoch = time.time()
+    
     model.train()
     for batch_idx, (data, target) in enumerate(train_loader):
         # label noise
@@ -42,6 +51,12 @@ def train(args, model, device, train_loader, optimizer, epoch):
         loss = F.nll_loss(output, target)
         loss.backward()
         optimizer.step()
+        
+        training_loss += loss.item()
+        _, predicted = output.max(1)
+        total += target.size(0)
+        correct += predicted.eq(target).sum().item()
+
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 epoch, batch_idx * len(data), len(train_loader.dataset),
@@ -49,11 +64,18 @@ def train(args, model, device, train_loader, optimizer, epoch):
             if args.dry_run:
                 break
 
+    end_epoch = time.time()
+    train_time[int(epoch)] = end_epoch-starting_time_epoch
+    train_accuracy[int(epoch)] = 100.*correct/total
+    train_loss[int(epoch)] = training_loss/len(train_loader.dataset)
+
+
 
 def test(model, device, test_loader, epoch):
     model.eval()
     iteration_test_loss = 0
     correct = 0
+    last_saved = 0
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
@@ -82,11 +104,11 @@ def test(model, device, test_loader, epoch):
                 'dataset': 'MNIST',
                 'net': model.state_dict(),
             }
-            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
-                os.mkdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
+            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN'):
+                os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
-                        .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
+            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+                        .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
 
@@ -138,6 +160,8 @@ def main():
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
+    
+    best_acc = 0
     train_accuracy = np.zeros(args.epochs)
     train_time = np.zeros(args.epochs)
     train_loss = np.zeros(args.epochs)
