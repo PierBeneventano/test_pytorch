@@ -67,7 +67,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
     end_epoch = time.time()
     train_time[int(epoch)] = end_epoch-starting_time_epoch
     train_accuracy[int(epoch)] = 100.*correct/total
-    train_loss[int(epoch)] = training_loss/len(train_loader.dataset)
+    train_loss[int(epoch)] = training_loss/total
 
 
 
@@ -89,6 +89,9 @@ def test(model, device, test_loader, epoch):
     # print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
     #     iteration_test_loss, correct, len(test_loader.dataset),
     #     100. * correct / len(test_loader.dataset)))
+
+    test_accuracy[int(epoch)] = 100.*correct/len(test_loader.dataset)
+    test_loss[int(epoch)] = iteration_test_loss/len(test_loader.dataset)
 
 
 
