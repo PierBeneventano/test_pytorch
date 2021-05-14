@@ -1,6 +1,3 @@
-# October 25, 2020
-# https://github.com/pytorch/examples/blob/master/mnist/main.py
-
 from __future__ import print_function
 import argparse
 import os
