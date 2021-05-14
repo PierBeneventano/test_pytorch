@@ -18,6 +18,14 @@ import optim_util
 from models import *
 
 
+best_acc = 0
+train_accuracy = np.zeros(args.epochs)
+train_time = np.zeros(args.epochs)
+train_loss = np.zeros(args.epochs)
+test_accuracy = np.zeros(args.epochs)
+test_loss = np.zeros(args.epochs)
+
+
 def train(args, model, device, train_loader, optimizer, epoch):
     
     training_loss = 0
@@ -163,13 +171,6 @@ def main():
         train_kwargs.update(cuda_kwargs)
         test_kwargs.update(cuda_kwargs)
 
-    
-    best_acc = 0
-    train_accuracy = np.zeros(args.epochs)
-    train_time = np.zeros(args.epochs)
-    train_loss = np.zeros(args.epochs)
-    test_accuracy = np.zeros(args.epochs)
-    test_loss = np.zeros(args.epochs)
 
     transform=transforms.Compose([
         transforms.ToTensor(),
