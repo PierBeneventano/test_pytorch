@@ -98,12 +98,12 @@ def train(args, model, device, train_loader, optimizer, epoch):
         total += target.size(0)
         correct += predicted.eq(target).sum().item()
 
-        if batch_idx % args.log_interval == 0:
-            print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                epoch, batch_idx * len(data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.item()))
-            if args.dry_run:
-                break
+        # if batch_idx % args.log_interval == 0:
+        #     print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+        #         epoch, batch_idx * len(data), len(train_loader.dataset),
+        #         100. * batch_idx / len(train_loader), loss.item()))
+        #     if args.dry_run:
+        #         break
 
     end_epoch = time.time()
     train_time[int(epoch)] = end_epoch-starting_time_epoch
@@ -127,9 +127,9 @@ def test(model, device, test_loader, epoch):
 
     iteration_test_loss /= len(test_loader.dataset)
 
-    # print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-    #     iteration_test_loss, correct, len(test_loader.dataset),
-    #     100. * correct / len(test_loader.dataset)))
+    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        iteration_test_loss, correct, len(test_loader.dataset),
+        100. * correct / len(test_loader.dataset)))
 
     test_accuracy[int(epoch)] = 100.*correct/len(test_loader.dataset)
     test_loss[int(epoch)] = iteration_test_loss/len(test_loader.dataset)
@@ -151,7 +151,7 @@ def test(model, device, test_loader, epoch):
             if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN'):
                 os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
                         .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
