@@ -3,7 +3,8 @@ import numpy
 import matplotlib as mpl
 
 print('==> Resuming from checkpoint..')
-checkpoint = torch.load('/tigress/pb29/checkpoint/final/FINAL_dataset_MNIST-model_MLP-epoch_200-label_noise_prob_0-input_gaussian_noise_0-gaussian_noise_SD_0-noise_decay_fixed-batch_size_128.pt')
+checkpoint = torch.load('/tigress/pb29/checkpoint/final/FINAL_dataset_MNIST-model_MLP-epoch_200-label_noise_prob_0-input_gaussian_noise_0-gaussian_noise_SD_0-noise_decay_fixed-batch_size_128.pt',
+                         map_location ='cpu')
 best_acc = checkpoint['best_acc']
 epoch = checkpoint['epoch']
 net_arch = checkpoint['architecture']
