@@ -29,7 +29,7 @@ def Linearnet_MNIST_5():
     return LinearNet(input_dim = [1,28,28])
 
 def test():
-    net = linearnet_cifar_10()
+    net = Linearnet_cifar_10()
     x = torch.randn(1,3,32,32)
     y = net(x)
     print(y)

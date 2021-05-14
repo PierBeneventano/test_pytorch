@@ -10,16 +10,9 @@ def create_makefile(choice_dict):
 
     for batch_size in [64, 128, 1024, 4096]:
         for lr_choices in choice_dict['learning_rate']:
-    
-            for net_choice in choice_dict['net']:
-                f.write(f"\t@python main.py main_MNIST.py --net {net_choice} --lr {lr_choices} --batchsize {batch_size}\n")
-
-
-    # Gradient noise
-    for lg_choice in choice_dict['gaussian_noise_sigma']:
-        for lg_sched_choice in choice_dict['noise_sched']:
-            f.write(f"\t@python main.py --dataset 'MNIST' --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 128 \n")
-            f.write(f"\t@python main.py  --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 128 \n")
+            f.write(f"\t@python main.py main_MNIST.py --lr {lr_choices} --batchsize {batch_size}\n")
+            for ln_choice in choice_dict['label_noise_prob']:
+                f.write(f"\t@python main.py main_MNIST.py --label_noise {ln_choice} --lr {lr_choices} --batchsize {batch_size}\n")
 
 
 if __name__ == "__main__":
