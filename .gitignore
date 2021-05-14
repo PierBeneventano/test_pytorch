@@ -4,3 +4,5 @@ makefile
 tiger_files
 slurm_out
 *~
+*.pt
+*.ipynb
