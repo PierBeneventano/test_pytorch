@@ -48,7 +48,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
             else:
                 label_noise = optim_util.noise_decay(args.label_noise, epoch, args.noise_decay)
             
-            targets = optim_util.apply_label_noise(targets, label_noise,
+            target = optim_util.apply_label_noise(target, label_noise,
 				num_classes=100 if args.dataset == 'cifar100' else 10)
         
         # Gaussian noise case
@@ -58,7 +58,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
             else:
                 input_gaussian_noise = optim_util.noise_decay(args.input_gaussian_noise, epoch, args.noise_decay)
             
-            inputs = optim_util.apply_gaussian_noise(inputs, input_gaussian_noise)
+            data = optim_util.apply_gaussian_noise(data, input_gaussian_noise)
 
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
