@@ -18,5 +18,5 @@ from .densenet import *
 from .dla import *
 
 from .multilayerp import *
-from .linearnet import *
+from .linear_mnist import *
 from .cnn_mnist import *
