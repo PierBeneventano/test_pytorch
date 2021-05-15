@@ -5,12 +5,12 @@ import torch.nn.functional as F
 class CNN_mnist(nn.Module):
     def __init__(self):
         super(CNN_mnist, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.l1 = nn.Linear(1, 32, 3, 1)
+        self.l2 = nn.Linear(32, 64, 3, 1)
+        self.l3 = nn.Dropout(0.25)
+        self.l4 = nn.Dropout(0.5)
+        self.l5 = nn.Linear(9216, 128)
+        self.l6 = nn.Linear(128, 10)
 
     def forward(self, x):
         x = self.conv1(x)
