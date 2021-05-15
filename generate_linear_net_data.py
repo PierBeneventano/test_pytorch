@@ -73,12 +73,9 @@ def main():
     
     test_data = LinearNetData(list_IDs = partition['test'], labels = y, inputs = x)
 
-    if not os.path.isdir('./data/synthetic_linear_net'):
-        os.mkdir('./data/synthetic_linear_net')
-    
     state = {
         'generator linear net': net,
     }
-    torch.save(state, './data/synthetic_linear_net/generator.pt')
-    torch.save(train_data, './data/synthetic_linear_net/training.pt')
-    torch.save(test_data, './data/synthetic_linear_net/test.pt')
+    torch.save(state, 'data/synthetic_linear_net/generator.pt')
+    torch.save(train_data, 'data/synthetic_linear_net/training.pt')
+    torch.save(test_data, 'data/synthetic_linear_net/test.pt')
