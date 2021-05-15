@@ -10,9 +10,9 @@ def create_makefile(choice_dict):
 
     for batch_size in [64, 128, 1024, 4096]:
         for lr_choices in choice_dict['learning_rate']:
-            # f.write(f"\t@python main_MNIST.py --net linear --lr {lr_choices} --batchsize {batch_size}\n")
-            # for ln_choice in choice_dict['label_noise_prob']:
-            #     f.write(f"\t@python main_MNIST.py --net linear --label_noise {ln_choice} --lr {lr_choices} --batchsize {batch_size}\n")
+            f.write(f"\t@python main_MNIST.py --net linear --lr {lr_choices} --batchsize {batch_size}\n")
+            for ln_choice in choice_dict['label_noise_prob']:
+                f.write(f"\t@python main_MNIST.py --net linear --label_noise {ln_choice} --lr {lr_choices} --batchsize {batch_size}\n")
             for lg_choice in choice_dict['gaussian_noise_sigma']:
                 f.write(f"\t@python main_MNIST.py --net linear --input_gaussian_noise {lg_choice} --lr {lr_choices} --batchsize {batch_size}\n")
 
