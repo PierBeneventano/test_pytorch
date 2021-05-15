@@ -227,9 +227,9 @@ def main():
 
     print('Final saving...')
     state = {
-        'best_acc': 1,
+        'best_acc': best_acc,
         'epoch': epoch+1,
-        'architecture':'CNN_mnist',
+        'architecture':'linear',
         'net': model.state_dict(),
         'test_acc_array': test_accuracy,
         'test_loss_array': test_loss,
@@ -237,8 +237,8 @@ def main():
         'train_loss_array': train_loss,
         'train_time': train_time,
     }   
-    torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_MNIST-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-            .format(args.net, args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+    torch.save(state, '/tigress/pb29/checkpoint/training/syntetics_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+            .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
 
 
 if __name__ == '__main__':

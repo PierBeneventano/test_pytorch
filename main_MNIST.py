@@ -214,7 +214,7 @@ def main():
 
     print('Final saving...')
     state = {
-        'best_acc': 1,
+        'best_acc': best_acc,
         'epoch': epoch+1,
         'architecture':'CNN_mnist',
         'net': model.state_dict(),
