@@ -52,6 +52,27 @@ train_loss = np.zeros(args.epochs)
 test_accuracy = np.zeros(args.epochs)
 test_loss = np.zeros(args.epochs)
 
+class LinearNetData(torch.utils.data.Dataset):
+    def __init__(self, list_IDs, labels, inputs):
+        'Initialization'
+        self.labels = labels
+        self.list_IDs = list_IDs
+        self.inputs = inputs
+    
+    def __len__(self):
+        'Denotes the total number of samples'
+        return len(self.list_IDs)
+    
+    def __getitem__(self, index):
+        'Generates one sample of data'
+        # Select sample
+        ID = self.list_IDs[index]
+
+        # Load data and get label
+        X = self.inputs[ID]
+        y = self.labels[ID]
+
+        return X, y
 
 def train(args, model, device, train_loader, optimizer, epoch):
     
