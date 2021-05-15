@@ -43,11 +43,11 @@ class lin_generator(nn.Module):
         return output
     
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     partition = {}
-    partition['training'] = [*range(0, 50000)]
-    partition['test'] = [*range(50000, 60000)]
+    partition['training'] = [*range(1, 50001)]
+    partition['test'] = [*range(50001, 60001)]
 
     net = lin_generator()
 
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     y = {}
     z = {}
 
-    for ID in range(0,50000):
+    for ID in range(1,50001):
         x[ID] = torch.randn(784)
         z[ID] = net(x[ID])
         y[ID] = torch.argmax(z[ID])
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     y = {}
     z = {}
 
-    for ID in range(0,10000):
+    for ID in range(50001,60001):
         x[ID] = torch.randn(784)
         z[ID] = net(x[ID])
         y[ID] = torch.argmax(z[ID])
