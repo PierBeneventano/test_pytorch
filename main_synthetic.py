@@ -147,15 +147,15 @@ def test(model, device, test_loader, epoch):
             state = {
                 'acc': acc,
                 'epoch': epoch+1,
-                'architecture': 'CNN_mnist',
-                'dataset': 'MNIST',
+                'architecture': 'linear',
+                'dataset': 'syntetics_linear_net',
                 'net': model.state_dict(),
             }
-            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}'.format(args.net)):
-                os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}'.format(args.net))
+            if not os.path.isdir('/tigress/pb29/checkpoint/training/syntetics_linear_net'):
+                os.mkdir('/tigress/pb29/checkpoint/training/syntetics_linear_net')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-                        .format(args.net, args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+            torch.save(state, '/tigress/pb29/checkpoint/training/syntetics_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+                        .format(args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
 
@@ -186,8 +186,8 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset1 = torch.load('./data/synthetic_linear_net/training.pt')
-    dataset2 = torch.load('./data/synthetic_linear_net/test.pt')
+    dataset1 = torch.load('synthetic_linear_net/training.pt')
+    dataset2 = torch.load('synthetic_linear_net/test.pt')
 
     train_loader = torch.utils.data.DataLoader(dataset1,**train_kwargs)
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
