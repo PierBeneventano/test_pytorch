@@ -151,11 +151,11 @@ def test(model, device, test_loader, epoch):
                 'dataset': 'MNIST',
                 'net': model.state_dict(),
             }
-            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN'):
-                os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN')
+            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}'.format(args.net)):
+                os.mkdir('/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}'.format(args.net))
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_CNN/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-                        .format(args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_MNIST-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+                        .format(args.net, args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
 
@@ -224,8 +224,8 @@ def main():
         'train_loss_array': train_loss,
         'train_time': train_time,
     }   
-    torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_MNIST-model_CNN-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-            .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+    torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_MNIST-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+            .format(args.net, args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
 
 
 if __name__ == '__main__':
