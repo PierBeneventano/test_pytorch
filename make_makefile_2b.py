@@ -10,8 +10,10 @@ def create_makefile(choice_dict):
 
 
     # SGD + label noise
-    f.write(f"\t@python main.py --label_noise 0.1 --noise_sched 'decay' --batchsize 4096 \n")
-    f.write(f"\t@python main.py --dataset 'MNIST' --label_noise 0.1 --noise_sched decay --batchsize 4096 \n")
+    # f.write(f"\t@python main.py --dataset 'MNIST' --label_noise {ln_choice} --noise_sched {ln_sched_choice} --batchsize 4096 \n")
+    f.write(f"\t@python main.py --label_noise 0.1 --noise_sched 'decay' --batchsize 64 --epochs 250 \n")
+    f.write(f"\t@python main.py --label_noise 0.1 --noise_sched 'decay' --batchsize 256 --epochs 250 \n")
+    # f.write(f"\t@python main.py --dataset 'MNIST' --label_noise 0.5 --noise_sched decay --batchsize 4096 \n")
     
 if __name__ == "__main__":
     # creating choice dictionary
