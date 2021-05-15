@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 class Linear_mnist(nn.Module):
     def __init__(self):
-        super(CNN_mnist, self).__init__()
+        super(Linear_mnist, self).__init__()
         self.l1 = nn.Linear(784, 512)
         self.l2 = nn.Linear(512, 512)
         self.l3 = nn.Linear(512, 256)
