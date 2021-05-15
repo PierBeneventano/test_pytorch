@@ -203,10 +203,6 @@ def main():
         test_kwargs.update(cuda_kwargs)
 
 
-    transform=transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
-        ])
     dataset1 = torch.load('data/synthetic_linear_net/training.pt')
     dataset2 = torch.load('data/synthetic_linear_net/test.pt')
 
