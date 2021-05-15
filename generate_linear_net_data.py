@@ -83,3 +83,7 @@ def main():
     print('c')
     torch.save(test_data, 'data/synthetic_linear_net/test.pt')
     print('d')
+
+
+
+main()
