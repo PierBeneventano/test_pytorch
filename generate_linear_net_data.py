@@ -76,6 +76,10 @@ def main():
     state = {
         'generator linear net': net,
     }
+    print('a')
     torch.save(state, 'data/synthetic_linear_net/generator.pt')
+    print('b')
     torch.save(train_data, 'data/synthetic_linear_net/training.pt')
+    print('c')
     torch.save(test_data, 'data/synthetic_linear_net/test.pt')
+    print('d')
