@@ -176,7 +176,7 @@ def test(model, device, test_loader, epoch):
                 os.mkdir('/tigress/pb29/checkpoint/training/syntetics_linear_net')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
             torch.save(state, '/tigress/pb29/checkpoint/training/syntetics_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-                        .format(args.epochs + 1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+                        .format(epoch, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
 
@@ -236,8 +236,10 @@ def main():
         'train_acc_array': train_accuracy,
         'train_loss_array': train_loss,
         'train_time': train_time,
-    }   
-    torch.save(state, '/tigress/pb29/checkpoint/training/syntetics_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+    }
+    if not os.path.isdir('/tigress/pb29/checkpoint/final/syntetics_linear_net'):
+                os.mkdir('/tigress/pb29/checkpoint/final/syntetics_linear_net')   
+    torch.save(state, '/tigress/pb29/checkpoint/final/syntetics_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
             .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
 
 
