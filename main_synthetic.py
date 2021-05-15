@@ -186,8 +186,8 @@ def main():
         transforms.ToTensor(),
         transforms.Normalize((0.1307,), (0.3081,))
         ])
-    dataset1 = torch.load('synthetic_linear_net/training.pt')
-    dataset2 = torch.load('synthetic_linear_net/test.pt')
+    dataset1 = torch.load('data/synthetic_linear_net/training.pt')
+    dataset2 = torch.load('dataù7synthetic_linear_net/test.pt')
 
     train_loader = torch.utils.data.DataLoader(dataset1,**train_kwargs)
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)

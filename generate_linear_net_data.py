@@ -43,7 +43,7 @@ class lin_generator(nn.Module):
         return output
     
 
-def main():
+if __name__ == '__main__':
 
     partition = {}
     partition['training'] = [*range(0, 50000)]
@@ -84,6 +84,3 @@ def main():
     torch.save(test_data, 'data/synthetic_linear_net/test.pt')
     print('d')
 
-
-
-main()
