@@ -45,6 +45,8 @@ class lin_generator(nn.Module):
 
 if __name__ == "__main__":
 
+    torch.manual_seed(1)
+
     partition = {}
     partition['training'] = [*range(1, 50001)]
     partition['test'] = [*range(50001, 60001)]
