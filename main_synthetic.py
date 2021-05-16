@@ -20,8 +20,8 @@ parser.add_argument('--batchsize', type=int, default=64, metavar='N',
                         help='input batch size for training (default: 64)')
 parser.add_argument('--test_batchsize', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
-parser.add_argument('--epochs', type=int, default=30, metavar='N',
-                        help='number of epochs to train (default: 30)')
+parser.add_argument('--epochs', type=int, default=16, metavar='N',
+                        help='number of epochs to train (default: 16)')
 # parser.add_argument('--net', choices=['CNN', 'linear'], default='CNN', help='what model to train')
 parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
                         help='learning rate (default: 1.0)')
@@ -175,7 +175,7 @@ def test(model, device, test_loader, epoch):
             if not os.path.isdir('/tigress/pb29/checkpoint/training/synthetic_linear_net'):
                 os.mkdir('/tigress/pb29/checkpoint/training/synthetic_linear_net')
             torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+            torch.save(state, '/tigress/pb29/checkpoint/training/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
                         .format(epoch, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
             best_acc = acc
 
@@ -239,7 +239,7 @@ def main():
     }
     if not os.path.isdir('/tigress/pb29/checkpoint/final/synthetic_linear_net'):
                 os.mkdir('/tigress/pb29/checkpoint/final/synthetic_linear_net')   
-    torch.save(state, '/tigress/pb29/checkpoint/final/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+    torch.save(state, '/tigress/pb29/checkpoint/final/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
             .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
 
 
