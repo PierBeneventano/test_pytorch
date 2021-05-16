@@ -92,7 +92,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
                 label_noise = args.label_noise
             else:
                 label_noise = optim_util.noise_decay(args.label_noise, epoch, args.noise_decay)
-            print('a')
+            
             target = optim_util.apply_label_noise(target, label_noise, 10)
         
         # Gaussian noise case
