@@ -8,6 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import torch.nn.init as init
+
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 
@@ -210,6 +212,10 @@ def main():
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     model = Linear_mnist().to(device)
+
+    for m in model.modules():
+        init.normal_(m.weight, std=1e-1)
+        init.normal_(m.bias, 1)
 
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
