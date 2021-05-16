@@ -214,8 +214,9 @@ def main():
     model = Linear_mnist().to(device)
 
     for m in model.modules():
-        init.normal_(m.weight, std=1e-1)
-        init.normal_(m.bias, 1)
+        if isinstance(m, nn.Linear):
+            init.normal_(m.weight, std=1e-1)
+            init.normal_(m.bias, 1)
 
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
