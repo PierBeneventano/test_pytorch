@@ -6,6 +6,7 @@ slurm_out
 Samy_slurm.slurm
 *~
 *.pt
-*.ipynb
+# *.ipynb
 *.pdf
 .ipynb_checkpoints
+utils.py
