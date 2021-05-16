@@ -10,7 +10,7 @@ def create_makefile(choice_dict):
 
     for batch_size in [64, 128, 1024, 4096]:
         for lr_choices in choice_dict['learning_rate']:
-            f.write(f"\t@python main_synthetic.py --gaussian_noise 0.002 --lr {lr_choices} --batchsize {batch_size} --epochs 100\n")
+            f.write(f"\t@python main_synthetic.py --input_gaussian_noise 0.2 --lr {lr_choices} --batchsize {batch_size} --epochs 30\n")
 
 
 if __name__ == "__main__":
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     label_noise_choices = np.array([0.5, 0.2, 0.1])
     g_noise_choices = np.array([0.2, 0.1, 0.02])
     noise_sched_choices = np.array(['decay', 'fixed'])
-    lr_choices = np.array([0.1, 0.01, 1])
+    lr_choices = np.array([0.1, 1])
 
     choice_dict['net'] = net_choices
     choice_dict['label_noise_prob'] = label_noise_choices
