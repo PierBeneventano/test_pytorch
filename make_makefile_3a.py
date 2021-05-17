@@ -10,7 +10,7 @@ def create_makefile(choice_dict):
 
     for batch_size in [64, 128, 1024, 4096]:
         for lr_choices in choice_dict['learning_rate']:
-            f.write(f"\t@python main_synthetic.py --input_gaussian_noise 0.2 --lr {lr_choices} --batchsize {batch_size} --epochs 30\n")
+            f.write(f"\t@python main_synthetic.py --input_gaussian_noise 0.1 --lr {lr_choices} --batchsize {batch_size} --epochs 30\n")
 
 
 if __name__ == "__main__":

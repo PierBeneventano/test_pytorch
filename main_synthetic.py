@@ -163,23 +163,23 @@ def test(model, device, test_loader, epoch):
 
 
     acc = 100.*correct/len(test_loader.dataset)
-    if (int(epoch)-last_saved) >= 10 :
-        last_saved = int(epoch)
-        if acc > best_acc:
-            print('Saving...')
-            state = {
-                'acc': acc,
-                'epoch': epoch+1,
-                'architecture': 'linear',
-                'dataset': 'synthetic_linear_net',
-                'net': model.state_dict(),
-            }
-            if not os.path.isdir('/tigress/pb29/checkpoint/training/synthetic_linear_net'):
-                os.mkdir('/tigress/pb29/checkpoint/training/synthetic_linear_net')
-            torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-                        .format(epoch, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
-            best_acc = acc
+    if acc > best_acc:
+        best_acc = acc
+        # if (int(epoch)-last_saved) >= 10 :
+        #     print('Saving...')
+        #     state = {
+        #         'acc': acc,
+        #         'epoch': epoch+1,
+        #         'architecture': 'linear',
+        #         'dataset': 'synthetic_linear_net',
+        #         'net': model.state_dict(),
+        #     }
+        #     if not os.path.isdir('/tigress/pb29/checkpoint/training/synthetic_linear_net'):
+        #         os.mkdir('/tigress/pb29/checkpoint/training/synthetic_linear_net')
+        #     torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
+        #     torch.save(state, '/tigress/pb29/checkpoint/training/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
+        #                 .format(epoch, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+        #     best_acc = acc
 
 
 def main():
@@ -246,8 +246,8 @@ def main():
     }
     if not os.path.isdir('/tigress/pb29/checkpoint/final/synthetic_linear_net'):
                 os.mkdir('/tigress/pb29/checkpoint/final/synthetic_linear_net')   
-    torch.save(state, '/tigress/pb29/checkpoint/final/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}-lr_{}.pt'
-            .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize, args.lr))
+    torch.save(state, '/tigress/pb29/checkpoint/final/synthetic_linear_net/epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-batch_size_{}-lr_{}.pt'
+            .format(args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.batchsize, args.lr))
 
 
 if __name__ == '__main__':
