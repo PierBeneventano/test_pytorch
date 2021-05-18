@@ -375,7 +375,7 @@ def test(epoch):
     acc = 100.*correct/total
     if acc > best_acc:
         best_acc = acc
-        if args.save == 'yes':
+        if args.save_intermediate == 'yes':
             if (int(epoch)-last_saved) >= 10 :
                 last_saved = int(epoch)
                 print('Saving...')
