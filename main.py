@@ -29,7 +29,7 @@ parser.add_argument('--dataset', choices=['MNIST', 'cifar10', 'cifar100'], defau
 parser.add_argument('--net', choices=['vgg', 'densenet', 'dla'], default='vgg', help='what model to train')
 parser.add_argument('--epochs', default=200, type=int, help='number of epochs')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
-# parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better and it did not save in the previous 10')
+parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better (it does not save in the previous 10)')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
 # Optimizer related
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
@@ -373,24 +373,26 @@ def test(epoch):
 
     # Save checkpoint.
     acc = 100.*correct/total
-    if (int(epoch)-last_saved) >= 10 :
-        last_saved = int(epoch)
-        if acc > best_acc:
-            print('Saving...')
-            state = {
-                'acc': acc,
-                'epoch': epoch+1,
-                'architecture':args.net,
-                'dataset': args.dataset,
-                'net': net.state_dict(),
-                'optimizer': optimizer.state_dict(),
-            }
-            if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
-                os.mkdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
-            torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
-            torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+    if acc > best_acc:
+        best_acc = acc
+        if args.save == 'yes':
+            if (int(epoch)-last_saved) >= 10 :
+                last_saved = int(epoch)
+                print('Saving...')
+                state = {
+                    'acc': acc,
+                    'epoch': epoch+1,
+                    'architecture':args.net,
+                    'dataset': args.dataset,
+                    'net': net.state_dict(),
+                    'optimizer': optimizer.state_dict(),
+                }
+                if not os.path.isdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net)):
+                    os.mkdir('/tigress/pb29/checkpoint/training/dataset_{}-model_{}'.format(args.dataset, args.net))
+                torch.save(state, '/tigress/pb29/checkpoint/ckpt.pt')
+                torch.save(state, '/tigress/pb29/checkpoint/training/dataset_{}-model_{}/epoch_{}-label_noise_prob_{}-input_gaussian_noise_SD_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
                         .format(args.dataset, args.net, epoch+1, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))
-            best_acc = acc
+
 
 
 np.random.seed(0)
@@ -421,7 +423,7 @@ state = {
     'train_loss_array': train_loss,
     'train_time': train_time,
 }
-if not os.path.isdir('/tigress/pb29/checkpoint/final'):
-    os.mkdir('/tigress/pb29/checkpoint/final')
-torch.save(state, '/tigress/pb29/checkpoint/final/FINAL_dataset_{}-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
+if not os.path.isdir('/tigress/pb29/checkpoint/final/dataset_{}'.format(args.dataset)):
+    os.mkdir('/tigress/pb29/checkpoint/final/dataset_{}'.format(args.dataset))
+torch.save(state, '/tigress/pb29/checkpoint/final/dataset_{}/FINAL_-model_{}-epoch_{}-label_noise_prob_{}-input_gaussian_noise_{}-gaussian_noise_SD_{}-noise_decay_{}-batch_size_{}.pt'
             .format(args.dataset, args.net, args.epochs, args.label_noise, args.input_gaussian_noise, args.gaussian_noise, args.noise_sched, args.batchsize))

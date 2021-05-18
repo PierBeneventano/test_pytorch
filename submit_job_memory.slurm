@@ -18,4 +18,9 @@ module load anaconda3/2020.11
 module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
 conda activate torch-env
 
-make
+while read b
+    while read a
+    do
+        python3 main.py --dataset cifar10 --batch_size $a --lr $b > $a.out & $b.out
+    done < filename.dat
+wait
