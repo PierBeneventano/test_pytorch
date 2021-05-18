@@ -201,7 +201,7 @@ else:
     elif args.net == 'dla':
         net = DLA()
     else:
-        net = VGG('VGG19')
+        net = VGG('VGG19', num_classes)
 
 print('Number of model parameters: {}'.format(
 		sum([p.data.nelement() for p in net.parameters()])))
@@ -242,8 +242,7 @@ optim_hparams = {
 	'weight_decay' : args.weight_decay,
 	'optim_type' : args.optim_type
 }
-optimizer = optim_util.create_optimizer(
-	net,	optim_hparams)
+optimizer = optim_util.create_optimizer(net, optim_hparams)
 
 scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=200)
 
