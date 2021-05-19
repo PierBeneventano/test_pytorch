@@ -15,8 +15,8 @@ def create_makefile(choice_dict):
     # Gradient noise
     for lg_choice in choice_dict['gaussian_noise_sigma']:
         for lg_sched_choice in choice_dict['noise_sched']:
-            f.write(f"\t@python main.py  --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 265 \n")
-            f.write(f"\t@python main.py  --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 64 \n")
+            f.write(f"\t@python3 main.py  --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 265 \n")
+            f.write(f"\t@python3 main.py  --gaussian_noise {lg_choice} --noise_sched {lg_sched_choice} --batchsize 64 \n")
 
 
 if __name__ == "__main__":
