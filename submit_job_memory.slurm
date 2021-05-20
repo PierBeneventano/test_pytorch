@@ -3,7 +3,7 @@
 #SBATCH --error=./slurm_out/slurm-%A.err        # error
 #SBATCH --output=./slurm_out/slurm-%A.out       # output 
 #SBATCH --nodes=1                # node count
-#SBATCH --ntasks=1               # total number of tasks across all nodes
+#SBATCH --ntasks=5               # total number of tasks across all nodes
 #SBATCH --cpus-per-task=4        # cpu-cores per task (>1 if multi-threaded tasks)
 #SBATCH --mem-per-cpu=8G         # memory per cpu-core (4G is default)
 #SBATCH --gres=gpu:1             # number of gpus per node
@@ -18,8 +18,10 @@ module load anaconda3/2020.11
 module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
 conda activate torch-env
 
-while read lr batchsize noise_size
-    do
-    srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size $batchsize --lr $lr --label_noise $noise_size > $batchsize-$lr-ln_$noise_size.out &
-    done < parameters.dat
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 128 --lr 1  > 128-1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 128 --lr 0.1  > 128-0.1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 64 --lr 1  > 64-1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 64 --lr 0.1  > 64-0.1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 32 --lr 1  > 128-1-ln_0.out &
+
 wait
