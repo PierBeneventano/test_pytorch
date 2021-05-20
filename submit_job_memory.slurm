@@ -18,9 +18,8 @@ module load anaconda3/2020.11
 module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
 conda activate torch-env
 
-while read b
-    while read a
+while read lr batchsize noise_size
     do
-        python3 main.py --dataset cifar10 --batch_size $a --lr $b > $a.out & $b.out
-    done < filename.dat
+    python3 main.py --dataset cifar10 --batch_size $batchsize --lr $lr --label_noise $noise_size > $batchsize-$lr-ln_$noise_size.out &
+    done < parameters.dat
 wait
