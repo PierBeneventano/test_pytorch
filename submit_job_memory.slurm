@@ -20,6 +20,6 @@ conda activate torch-env
 
 while read lr batchsize noise_size
     do
-    python3 main.py --dataset cifar10 --batch_size $batchsize --lr $lr --label_noise $noise_size > $batchsize-$lr-ln_$noise_size.out &
+    python3 main.py --epochs 1 --dataset cifar10 --batch_size $batchsize --lr $lr --label_noise $noise_size > $batchsize-$lr-ln_$noise_size.out &
     done < parameters.dat
 wait
