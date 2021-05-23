@@ -18,4 +18,10 @@ module load anaconda3/2020.11
 module load cudatoolkit/10.2 cudnn/cuda-10.2/7.6.5 rh/devtoolset/8
 conda activate torch-env
 
-make
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 128 --lr 1  > 128-1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 128 --lr 0.1  > 128-0.1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 64 --lr 1  > 64-1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 64 --lr 0.1  > 64-0.1-ln_0.out &
+srun -N 1 -n 1 python3 main.py --epochs 1 --dataset cifar10 --batch_size 32 --lr 1  > 128-1-ln_0.out &
+
+wait
