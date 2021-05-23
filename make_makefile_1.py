@@ -10,7 +10,7 @@ def create_makefile(choice_dict):
 
     # plain sgd
     f.write(f"\t@python main_MNIST.py --batchsize 50000\n")
-    f.write(f"\t@python main_MNIST.py --net linear --batchsize 50000\n")
+    # f.write(f"\t@python main_MNIST.py --net linear --batchsize 50000\n")
 
     # # Gradient noise
     # for lg_choice in choice_dict['gaussian_noise_sigma']:
