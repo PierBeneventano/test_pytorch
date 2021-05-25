@@ -411,7 +411,7 @@ for epoch in range(start_epoch, args.epochs):
         example_data.shape
         batch_idx_1, (example_test_data, example_test_targets) = next(examples_test)
         example_test_data.shape
-        for i in range(1,21):
+        for i in range(1,6):
             jac_norm_train = torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
             jac_norm_test = torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
             ave_train_grad[epoch] = ave_train_grad[epoch] + jac_norm_train
