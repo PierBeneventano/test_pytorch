@@ -10,8 +10,6 @@ import numpy as np
 import torchvision
 import torchvision.transforms as transforms
 
-import matplotlib.pyplot as plt
-
 import os
 import argparse
 import time
