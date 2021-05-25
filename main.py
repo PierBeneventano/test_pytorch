@@ -31,12 +31,13 @@ parser.add_argument('--epochs', default=200, type=int, help='number of epochs')
 parser.add_argument('--batchsize', default=128, type=int, help='batchsize')
 parser.add_argument('--save_intermediate', choices=['yes', 'no'], default='yes', help='save the state at every epoch in which get better (it does not save in the previous 10)')
 parser.add_argument('--resume', '-r', action='store_true', help='resume from checkpoint')
+parser.add_argument('--save_jacobian_norm', choices=['yes', 'no'], default='no', 
+                    help='save the average of the norm of the Jacobian on the first 20 points of the test set, and of 20 points randomly sampled from the training set')
 # Optimizer related
 parser.add_argument('--lr', default=0.1, type=float, help='learning rate')
 parser.add_argument('--optim_type', choices=['sgd', 'adam'], default='sgd')
 parser.add_argument('--momentum', default=0.9, type=float, help='momentum')
-parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float,
-					help='weight decay (default: 5e-4)')
+parser.add_argument('--weight_decay', '--wd', default=5e-4, type=float, help='weight decay (default: 5e-4)')
 # Noise infection related
 parser.add_argument('--gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the gaussian noise.')
 parser.add_argument('--input_gaussian_noise', default=0, type=float, help='the entity (the standard deviation sigma) of the input gaussian noise.')
@@ -78,6 +79,10 @@ train_time = np.zeros(args.epochs)
 train_loss = np.zeros(args.epochs)
 test_accuracy = np.zeros(args.epochs)
 test_loss = np.zeros(args.epochs)
+ave_train_grad = np.zeros(args.epochs)
+ave_test_grad = np.zeros(args.epochs)
+max_train_grad = np.zeros(args.epochs)
+max_test_grad = np.zeros(args.epochs)
 # train_accuracy = []
 # train_loss = []
 # test_accuracy = []
@@ -402,6 +407,23 @@ torch.manual_seed(0)
 for epoch in range(start_epoch, args.epochs):
     train(epoch)
     test(epoch)
+
+    if args.save_jacobian_norm == 'yes':
+        examples = enumerate(trainloader)
+        examples_test = enumerate(testloader)
+        batch_idx, (example_data, example_targets) = next(examples)
+        example_data.shape
+        batch_idx_1, (example_test_data, example_test_targets) = next(examples_test)
+        example_test_data.shape
+        for i in range(1,21):
+            ave_train_grad[epoch] = ave_train_grad[epoch] + torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
+            ave_test_grad[epoch] = ave_test_grad[epoch] + torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
+            max_train_grad[epoch] = max(max_train_grad[epoch], torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True)))
+            max_test_grad[epoch] = max(max_test_grad[epoch], torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True)))
+        ave_train_grad[epoch] = ave_train_grad[epoch]/20
+        ave_test_grad[epoch] = ave_test_grad[epoch]/20
+    
+
     print('Training accuracy:',
     train_accuracy[int(epoch)], ', training loss: ', train_loss[int(epoch)], ', time of the epoch: ', train_time[int(epoch)],
     's, test accuracy: ', test_accuracy[int(epoch)], ', test loss: ', test_loss[int(epoch)])
@@ -422,6 +444,10 @@ state = {
     'train_acc_array': train_accuracy,
     'train_loss_array': train_loss,
     'train_time': train_time,
+    'average_train_grad': ave_train_grad,
+    'average_test_grad': ave_test_grad,
+    'max_train_grad': ave_train_grad,
+    'max_test_grad': ave_test_grad,
 }
 if not os.path.isdir('/tigress/pb29/checkpoint/final/dataset_{}'.format(args.dataset)):
     os.mkdir('/tigress/pb29/checkpoint/final/dataset_{}'.format(args.dataset))
