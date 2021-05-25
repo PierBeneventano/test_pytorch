@@ -403,7 +403,7 @@ torch.manual_seed(0)
 
 
 for epoch in range(start_epoch, args.epochs):
-    
+
     if args.save_jacobian_norm == 'yes':
         examples = enumerate(trainloader)
         examples_test = enumerate(testloader)
@@ -412,10 +412,13 @@ for epoch in range(start_epoch, args.epochs):
         batch_idx_1, (example_test_data, example_test_targets) = next(examples_test)
         example_test_data.shape
         for i in range(1,21):
-            ave_train_grad[epoch] = ave_train_grad[epoch] + torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
-            ave_test_grad[epoch] = ave_test_grad[epoch] + torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
-            max_train_grad[epoch] = max(max_train_grad[epoch], torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True)))
-            max_test_grad[epoch] = max(max_test_grad[epoch], torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True)))
+            jac_norm_train = torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
+            jac_norm_test = torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
+            ave_train_grad[epoch] = ave_train_grad[epoch] + jac_norm_train
+            ave_test_grad[epoch] = ave_test_grad[epoch] + jac_norm_test
+            max_train_grad[epoch] = max(max_train_grad[epoch], jac_norm_train)
+            max_test_grad[epoch] = max(max_test_grad[epoch], jac_norm_test)
+            print('a')
         ave_train_grad[epoch] = ave_train_grad[epoch]/20
         ave_test_grad[epoch] = ave_test_grad[epoch]/20
 
