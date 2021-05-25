@@ -77,10 +77,10 @@ train_time = np.zeros(args.epochs)
 train_loss = np.zeros(args.epochs)
 test_accuracy = np.zeros(args.epochs)
 test_loss = np.zeros(args.epochs)
-ave_train_grad = np.zeros(args.epochs)
-ave_test_grad = np.zeros(args.epochs)
-max_train_grad = np.zeros(args.epochs)
-max_test_grad = np.zeros(args.epochs)
+ave_train_grad = np.zeros(args.epochs+1)
+ave_test_grad = np.zeros(args.epochs+1)
+max_train_grad = np.zeros(args.epochs+1)
+max_test_grad = np.zeros(args.epochs+1)
 # train_accuracy = []
 # train_loss = []
 # test_accuracy = []
@@ -411,14 +411,13 @@ for epoch in range(start_epoch, args.epochs):
         example_data.shape
         batch_idx_1, (example_test_data, example_test_targets) = next(examples_test)
         example_test_data.shape
-        for i in range(1,6):
+        for i in range(1,21):
             jac_norm_train = torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
             jac_norm_test = torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
             ave_train_grad[epoch] = ave_train_grad[epoch] + jac_norm_train
             ave_test_grad[epoch] = ave_test_grad[epoch] + jac_norm_test
             max_train_grad[epoch] = max(max_train_grad[epoch], jac_norm_train)
             max_test_grad[epoch] = max(max_test_grad[epoch], jac_norm_test)
-            print('a')
         ave_train_grad[epoch] = ave_train_grad[epoch]/20
         ave_test_grad[epoch] = ave_test_grad[epoch]/20
 
@@ -432,6 +431,24 @@ for epoch in range(start_epoch, args.epochs):
     scheduler.step()
 
 # Final saving
+
+if args.save_jacobian_norm == 'yes':
+    examples = enumerate(trainloader)
+    examples_test = enumerate(testloader)
+    batch_idx, (example_data, example_targets) = next(examples)
+    example_data.shape
+    batch_idx_1, (example_test_data, example_test_targets) = next(examples_test)
+    example_test_data.shape
+    for i in range(1,21):
+        jac_norm_train = torch.norm(torch.autograd.functional.jacobian(net, example_data[i:i+1,:,:,:], create_graph = True))
+        jac_norm_test = torch.norm(torch.autograd.functional.jacobian(net, example_test_data[i:i+1,:,:,:], create_graph = True))
+        ave_train_grad[args.epochs+1] = ave_train_grad[args.epochs+1] + jac_norm_train
+        ave_test_grad[args.epochs+1] = ave_test_grad[args.epochs+1] + jac_norm_test
+        max_train_grad[args.epochs+1] = max(max_train_grad[args.epochs+1], jac_norm_train)
+        max_test_grad[args.epochs+1] = max(max_test_grad[args.epochs+1], jac_norm_test)
+    ave_train_grad[args.epochs+1] = ave_train_grad[args.epochs+1]/20
+    ave_test_grad[args.epochs+1] = ave_test_grad[args.epochs+1]/20
+
 
 print('Final saving...')
 state = {
